@@ -4,9 +4,9 @@ export class TimeFormatPipe implements PipeTransform {
   transform(time: any): any {
     if(isNaN(time)) return;
 
-    var date = new Date(null);
-    date.setSeconds(time); // specify value for SECONDS here
-    var result = date.toISOString().substr(11, 8);
-    return result;
+    var seconds = time % 60;
+    var minutes = Math.floor((time % 3600 - seconds) / 60);
+    var hours = Math.floor((time - minutes - seconds) / 3600);
+    return ("00" + hours).slice(-2) + ":" + ("00" + minutes).slice(-2) + ":" + ("00" + seconds).slice(-2);
   }
 }

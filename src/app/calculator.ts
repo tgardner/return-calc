@@ -19,10 +19,12 @@ export class Calculator {
     }
 
     var gal = 20000 * Math.abs(this.start.galaxy - this.end.galaxy);
-    var sys = 2700 + 95 * Math.abs(this.start.galaxy - this.end.galaxy);
-    var plan = 1000 + 5 * Math.abs(this.start.galaxy - this.end.galaxy);
+    if(this.start.galaxy !== this.end.galaxy) return gal;
+    var sys = 2700 + 95 * Math.abs(this.start.system - this.end.system);
+    if(this.start.system !== this.end.system) return sys;
+    var plan = 1000 + 5 * Math.abs(this.start.planet - this.end.planet);
 
-    return gal + sys + plan;
+    return plan;
   }
 
   calculateFlightTime(v: number): number {
