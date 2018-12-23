@@ -67,4 +67,5 @@
     <button type="button" name="button" (click)="recall()" [hidden]="!started" class="btn btn-lg btn-secondary float-right">Recall</button>
   </div>
   <h2 [hidden]="!started" class="text-center">{{remaining | toTime}}</h2>
+  <h3 [hidden]="!started">Arrival: {{arrivalTime}}</h3>
 </div>

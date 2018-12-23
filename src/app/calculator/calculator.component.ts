@@ -17,6 +17,7 @@ export class CalculatorComponent implements OnInit {
 
   flightTime: number;
   remaining: number = 0;
+  arrivalTime: Date;
 
   started: boolean = false;
   recalled: boolean = false;
@@ -81,9 +82,9 @@ export class CalculatorComponent implements OnInit {
     this.remaining = 0;
   }
 
-  private startTimer(endTime): void {
+  private startTimer(endTime: any): void {
     this.timer = setInterval(() => {
-      var now = new Date();
+      var now:any = new Date();
       if(endTime < now) {
         if(!this.recalled) {
           this.recall();
@@ -95,6 +96,7 @@ export class CalculatorComponent implements OnInit {
 
       var remaining = (endTime - now);
       this.remaining = Math.round(remaining / 1000);
+      this.arrivalTime = endTime;
     }, 50);
   }
 
