@@ -21,8 +21,8 @@ export class CalculatorComponent implements OnInit {
   started: boolean = false;
   recalled: boolean = false;
 
-  timer: any;
   ships: Ship[] = SHIPS;
+  private timer: any;
 
   constructor() {
     var calculator = new Calculator(new Planet(1,1,1), new Planet(1,1,1));
@@ -31,7 +31,7 @@ export class CalculatorComponent implements OnInit {
     calculator.combustion = 15;
     calculator.impulse = 12;
     calculator.hyperspace = 10;
-    
+
     this.model = calculator;
   }
 
@@ -40,7 +40,7 @@ export class CalculatorComponent implements OnInit {
   }
 
   refresh(): void {
-    this.flightTime = this.calculateFlightTime();
+    this.flightTime = this.model.calculateFlightTime(this.calculateSpeed());
     if(isNaN(this.flightTime) || this.flightTime === Infinity) {
       this.model.initial = null;
       return;
@@ -81,7 +81,7 @@ export class CalculatorComponent implements OnInit {
     this.remaining = 0;
   }
 
-  startTimer(endTime): void {
+  private startTimer(endTime): void {
     this.timer = setInterval(() => {
       var now = new Date();
       if(endTime < now) {
@@ -98,14 +98,14 @@ export class CalculatorComponent implements OnInit {
     }, 50);
   }
 
-  stopTimer(): void {
+  private stopTimer(): void {
     clearInterval(this.timer);
     this.timer = null;
     this.started = false;
     this.recalled = false;
   }
 
-  calculateSpeed(): number {
+  private calculateSpeed(): number {
     var result = 0;
     for(var i = 0; i< this.ships.length; ++i) {
       var ship = this.ships[i];
@@ -145,13 +145,5 @@ export class CalculatorComponent implements OnInit {
     }
 
     return result;
-  }
-
-  calculateFlightTime(): number {
-    var d = this.model.calculateDistance();
-    var v = this.calculateSpeed();
-    var s = this.model.speed;
-    var a = this.model.modifier;
-    return Math.round((10 + (3500 / s) * Math.sqrt((10 * d) / v)) / a);
   }
 }

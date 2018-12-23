@@ -24,6 +24,13 @@ export class Calculator {
 
     return gal + sys + plan;
   }
+
+  calculateFlightTime(v: number): number {
+    var d = this.calculateDistance();
+    var s = this.speed;
+    var a = this.modifier;
+    return Math.round((10 + (3500 / s) * Math.sqrt((10 * d) / v)) / a);
+  }
 };
 
 export class Planet {
