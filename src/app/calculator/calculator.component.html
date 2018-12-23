@@ -19,7 +19,7 @@
 <div>
   <label for="speed">Fleet Speed:</label>
   <select id="speed" [(ngModel)]="model.speed" (change)="refresh()">
-    <option *ngFor="let speed of speeds" [ngValue]="speed/10">{{speed*10}}%</option>
+    <option *ngFor="let speed of speeds" [ngValue]="speed">{{speed*100}}%</option>
   </select>
 </div>
 <div>
@@ -52,8 +52,8 @@
   <input type="text" id="initial_time" pattern="[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}" [(ngModel)]="model.initial" />
 </div>
 <div>
-  <button type="button" name="button" (click)="start()" [hidden]="started">Start</button>
+  <button type="button" name="button" (click)="start()" [hidden]="started || !model.initial">Start</button>
   <button type="button" name="button" (click)="stop()" [hidden]="!started">Stop</button>
-  <button type="button" name="button" (click)="recall()">Recall</button>
+  <button type="button" name="button" (click)="recall()" [hidden]="!started">Recall</button>
 </div>
 <h2 [hidden]="!started">{{remaining | toTime}}</h2>

@@ -4,13 +4,13 @@ import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PlanetComponent } from './planet/planet.component';
+import { CalculatorComponent } from './calculator/calculator.component';
 import { TimeFormatPipe } from './pipes/time.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PlanetComponent,
+    CalculatorComponent,
     TimeFormatPipe
   ],
   imports: [
