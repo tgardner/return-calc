@@ -1,7 +1,18 @@
-<div>
+<div class="calculator">
   <app-calculator-controls
     [model]="model"
-    (change)='refresh($event)'></app-calculator-controls>
+    [hidePlanet]="currentCalculator == calculatorTypes.Recycle"
+    (change)='calculate($event)'></app-calculator-controls>
 
-  <app-deploy-calculator [flightTime]="flightTime"></app-deploy-calculator>
+  <app-deploy-calculator [hidden]="currentCalculator != calculatorTypes.Deploy"></app-deploy-calculator>
+  <app-recycle-calculator [hidden]="currentCalculator != calculatorTypes.Recycle"></app-recycle-calculator>
+</div>
+
+<div role="navigation" class="footer">
+  <ul class="nav nav-pills nav-fill">
+    <li *ngFor="let calculator of calculators | keyvalue" class="nav-item">
+      <a href="javascript:void(0)" (click)='currentCalculator = calculator.key' class="nav-link"
+        [ngClass]="{'active': currentCalculator == calculator.key}">{{calculator.value}}</a>
+    </li>
+  </ul>
 </div>

@@ -5,16 +5,14 @@ export class Calculator {
   constructor(
     public start: Planet,
     public end: Planet
-  ){
-    this.ships = SHIPS;
-  }
+  ){}
 
-  speed: number = 1;
-  modifier: number = 3;
-  combustion: number;
-  impulse: number;
-  hyperspace: number;
-  ships: Ship[];
+  public speed: number = 1;
+  public modifier: number = 3;
+  public combustion: number;
+  public impulse: number;
+  public hyperspace: number;
+  public ships: Ship[] = SHIPS;
 
   public calculateFlightTime(): number {
     var d = this.calculateDistance();

@@ -9,6 +9,7 @@ import { Ship, SHIPS } from '../ship';
 })
 export class CalculatorControlsComponent implements OnInit {
   @Input() model: Calculator;
+  @Input() hidePlanet: boolean = false;
 
   @Output() change: EventEmitter<Calculator> = new EventEmitter<Calculator>();
 
@@ -18,7 +19,8 @@ export class CalculatorControlsComponent implements OnInit {
 
   private ships: Ship[] = SHIPS;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

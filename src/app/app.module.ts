@@ -8,6 +8,7 @@ import { CalculatorComponent } from './calculator/calculator.component';
 import { TimePipe } from './time.pipe';
 import { CalculatorControlsComponent } from './calculator-controls/calculator-controls.component';
 import { DeployCalculatorComponent } from './deploy-calculator/deploy-calculator.component';
+import { RecycleCalculatorComponent } from './recycle-calculator/recycle-calculator.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { DeployCalculatorComponent } from './deploy-calculator/deploy-calculator
     CalculatorComponent,
     TimePipe,
     CalculatorControlsComponent,
-    DeployCalculatorComponent
+    DeployCalculatorComponent,
+    RecycleCalculatorComponent
   ],
   imports: [
     BrowserModule,

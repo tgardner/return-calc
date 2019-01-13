@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
+import { Calculator } from '../calculator';
 import { TimePipe } from '../time.pipe';
 import { interval } from 'rxjs';
 
@@ -9,33 +10,25 @@ const timeInterval = interval(50);
   templateUrl: './deploy-calculator.component.html',
   styleUrls: ['./deploy-calculator.component.scss']
 })
-export class DeployCalculatorComponent implements OnInit {
-  @Input() flightTime: number;
-
+export class DeployCalculatorComponent {
   private timer: any;
   private started: boolean = false;
   private recalled: boolean = false;
   private arrivalTime: Date;
   private remaining: number = 0;
   private initial: string;
+  private flightTime: number;
 
   constructor(private timePipe: TimePipe) { }
 
-  ngOnInit() {
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-      this.setInitialTime(changes.flightTime.currentValue);
-  }
-
-  private setInitialTime(flightTime: number) {
-    if(isNaN(flightTime) || flightTime === Infinity) {
+  public calculate(calculator: Calculator) : void {
+    this.flightTime = calculator.calculateFlightTime();
+    if(isNaN(this.flightTime) || this.flightTime === Infinity) {
       this.initial = null;
       return;
     }
 
     var result = this.timePipe.transform(this.flightTime);
-
     this.initial = result;
   }
 
