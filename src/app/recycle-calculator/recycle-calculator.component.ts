@@ -39,6 +39,11 @@ export class RecycleCalculatorComponent {
   }
 
   private reset(): void {
+    if(this.timer) {
+      this.timer.unsubscribe();
+      this.timer = null;
+    }
+    this.started = false;
     this.selected = null;
     var flightTime = this.calculator.calculateFlightTime();
 
@@ -69,11 +74,6 @@ export class RecycleCalculatorComponent {
   }
 
   public stop(): void {
-    if(this.timer) {
-      this.timer.unsubscribe();
-      this.timer = null;
-    }
-    this.started = false;
     this.reset();
   }
 
