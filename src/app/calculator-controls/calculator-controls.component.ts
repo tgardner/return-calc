@@ -13,11 +13,11 @@ export class CalculatorControlsComponent implements OnInit {
 
   @Output() change: EventEmitter<Calculator> = new EventEmitter<Calculator>();
 
-  private modifiers: number[] = [1,2,3,4,5];
+  public modifiers: number[] = [1,2,3,4,5];
 
-  private speeds: number[] = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1];
+  public speeds: number[] = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1];
 
-  private ships: Ship[] = SHIPS;
+  public ships: Ship[] = SHIPS;
 
   constructor() {
   }
@@ -25,7 +25,7 @@ export class CalculatorControlsComponent implements OnInit {
   ngOnInit() {
   }
 
-  private onChange() {
+  public onChange(): void {
     this.change.emit(this.model);
   }
 }

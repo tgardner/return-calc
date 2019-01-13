@@ -2,7 +2,7 @@
   <app-calculator-controls
     [model]="model"
     [hidePlanet]="currentCalculator == calculatorTypes.Recycle"
-    (change)='calculate($event)'></app-calculator-controls>
+    (change)='calculate()'></app-calculator-controls>
 
   <app-deploy-calculator [hidden]="currentCalculator != calculatorTypes.Deploy"></app-deploy-calculator>
   <app-recycle-calculator [hidden]="currentCalculator != calculatorTypes.Recycle"></app-recycle-calculator>

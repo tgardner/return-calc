@@ -12,12 +12,12 @@ const timeInterval = interval(50);
 })
 export class DeployCalculatorComponent {
   private timer: any;
-  private started: boolean = false;
-  private recalled: boolean = false;
-  private arrivalTime: Date;
-  private remaining: number = 0;
-  private initial: string;
-  private flightTime: number;
+  public started: boolean = false;
+  public recalled: boolean = false;
+  public arrivalTime: Date;
+  public remaining: number = 0;
+  public initial: string;
+  public flightTime: number;
 
   constructor(private timePipe: TimePipe) { }
 
@@ -32,7 +32,7 @@ export class DeployCalculatorComponent {
     this.initial = result;
   }
 
-  private start(): void {
+  public start(): void {
     if(this.timer) this.timer.unsubscribe();
 
     var a = this.initial.split(':'); // split it at the colons
@@ -50,7 +50,7 @@ export class DeployCalculatorComponent {
     this.started = true;
   }
 
-  private recall(): void {
+  public recall(): void {
     this.recalled = true;
 
     var endTime = new Date();
@@ -58,7 +58,7 @@ export class DeployCalculatorComponent {
     this.arrivalTime = endTime;
   }
 
-  private stop(): void {
+  public stop(): void {
     if(this.timer) {
       this.timer.unsubscribe();
       this.timer = null;

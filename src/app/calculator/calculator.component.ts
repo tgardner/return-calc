@@ -17,13 +17,13 @@ export class CalculatorComponent {
   @ViewChild(DeployCalculatorComponent) deployCalculator;
   @ViewChild(RecycleCalculatorComponent) recycleCalculator;
 
-  private model: Calculator;
-  private calculators: Map<CalculatorType, string> = new Map<CalculatorType, string>([
+  public model: Calculator;
+  public calculators: Map<CalculatorType, string> = new Map<CalculatorType, string>([
     [CalculatorType.Deploy, "Deploy"],
     [CalculatorType.Recycle, "Recycle"]
   ]);
-  private currentCalculator: CalculatorType;
-  private calculatorTypes = CalculatorType;
+  public currentCalculator: CalculatorType;
+  public calculatorTypes = CalculatorType;
 
   constructor() {
     var calculator = new Calculator(new Planet(1,1,1), new Planet(1,1,1));
@@ -37,7 +37,7 @@ export class CalculatorComponent {
     this.currentCalculator = CalculatorType.Deploy;
   }
 
-  private calculate(): void {
+  public calculate(): void {
     this.deployCalculator.calculate(this.model);
     this.recycleCalculator.calculate(this.model);
   }

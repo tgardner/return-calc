@@ -21,10 +21,10 @@ class SlotValue {
 export class RecycleCalculatorComponent {
 
   // planet number, flight time
-  private planets: Map<number, SlotValue> = new Map<number, SlotValue>();
+  public planets: Map<number, SlotValue> = new Map<number, SlotValue>();
+  public show: boolean = false;
+  public started: boolean = false;
   private calculator: Calculator;
-  private show: boolean = false;
-  private started: boolean = false;
   private timer: any;
 
   constructor() {
