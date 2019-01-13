@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { TimeFormatPipe } from '../pipes/time.pipe';
+import { TimePipe } from '../time.pipe';
 import { Calculator, Planet } from '../calculator';
-import { Ship, Drive, SHIPS } from '../ship';
+import { Drive } from '../drive.enum';
+import { Ship, SHIPS } from '../ship';
 
 @Component({
   selector: 'app-planet',
@@ -25,13 +26,13 @@ export class CalculatorComponent implements OnInit {
   ships: Ship[] = SHIPS;
   private timer: any;
 
-  constructor() {
+  constructor(private timePipe: TimePipe) {
     var calculator = new Calculator(new Planet(1,1,1), new Planet(1,1,1));
 
     // Just populate the initial model with some values
-    calculator.combustion = 15;
-    calculator.impulse = 12;
-    calculator.hyperspace = 10;
+    calculator.combustion = 16;
+    calculator.impulse = 13;
+    calculator.hyperspace = 12;
 
     this.model = calculator;
   }
@@ -47,8 +48,7 @@ export class CalculatorComponent implements OnInit {
       return;
     }
 
-    var formatter = new TimeFormatPipe();
-    var result = formatter.transform(this.flightTime);
+    var result = this.timePipe.transform(this.flightTime);
 
     this.model.initial = result;
   }

@@ -5,20 +5,20 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CalculatorComponent } from './calculator/calculator.component';
-import { TimeFormatPipe } from './pipes/time.pipe';
+import { TimePipe } from './time.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     CalculatorComponent,
-    TimeFormatPipe
+    TimePipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule
   ],
-  providers: [],
+  providers: [TimePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
