@@ -6,12 +6,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CalculatorComponent } from './calculator/calculator.component';
 import { TimePipe } from './time.pipe';
+import { CalculatorControlsComponent } from './calculator-controls/calculator-controls.component';
+import { DeployCalculatorComponent } from './deploy-calculator/deploy-calculator.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CalculatorComponent,
-    TimePipe
+    TimePipe,
+    CalculatorControlsComponent,
+    DeployCalculatorComponent
   ],
   imports: [
     BrowserModule,

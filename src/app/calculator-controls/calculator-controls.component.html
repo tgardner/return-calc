@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="planet col-sm-6">
+    <label for="start">Start:</label>
+    <div class="input-group">
+      <input type="number" [(ngModel)]="model.start.galaxy" (change)="onChange()" id="start" class="input-sm form-control" />
+      <input type="number" [(ngModel)]="model.start.system" (change)="onChange()" class="input-sm form-control" />
+      <input type="number" [(ngModel)]="model.start.planet" (change)="onChange()" class="input-sm form-control" />
+    </div>
+  </div>
+  <div class="planet col-sm-6">
+    <label for="end">Finish:</label>
+    <div class="input-group">
+      <input type="number" [(ngModel)]="model.end.galaxy" (change)="onChange()" id="end" class="input-sm form-control" />
+      <input type="number" [(ngModel)]="model.end.system" (change)="onChange()" class="input-sm form-control" />
+      <input type="number" [(ngModel)]="model.end.planet" (change)="onChange()" class="input-sm form-control" />
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-6">
+    <label for="modifier">Universe Speed:</label>
+    <select id="modifier" [(ngModel)]="model.modifier" (change)="onChange()" class="input-sm form-control">
+      <option *ngFor="let modifier of modifiers" [ngValue]="modifier">{{modifier}}x</option>
+    </select>
+  </div>
+  <div class="col-sm-6">
+    <label for="speed">Fleet Speed:</label>
+    <select id="speed" [(ngModel)]="model.speed" (change)="onChange()" class="input-sm form-control">
+      <option *ngFor="let speed of speeds" [ngValue]="speed">{{speed*100}}%</option>
+    </select>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-4">
+    <label for="combustion">Combustion:</label>
+    <input type="number" id="combustion" [(ngModel)]="model.combustion" (change)="onChange()" class="input-sm form-control" />
+  </div>
+  <div class="col-sm-4">
+    <label for="impulse">Impulse:</label>
+    <input type="number" id="impulse" [(ngModel)]="model.impulse" (change)="onChange()" class="input-sm form-control" />
+  </div>
+  <div class="col-sm-4">
+    <label for="hyperspace">Hyperspace:</label>
+    <input type="number" id="hyperspace" [(ngModel)]="model.hyperspace" (change)="onChange()" class="input-sm form-control" />
+  </div>
+</div>
+<div>
+  <label>Ships</label>
+  <div class="form-check" *ngFor="let ship of ships">
+    <label class="form-check-label">
+      <input type="checkbox" [(ngModel)]="ship.selected" (change)="onChange()" />
+      {{ship.name}}
+    </label>
+  </div>
+</div>

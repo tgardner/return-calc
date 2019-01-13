@@ -7,7 +7,8 @@ export class TimePipe implements PipeTransform {
 
   transform(time: any, args?: any): any {
     if(isNaN(time)) return;
-
+    time = Math.round(time);
+    
     var seconds = time % 60;
     var minutes = Math.floor((time % 3600 - seconds) / 60);
     var hours = Math.floor((time - minutes - seconds) / 3600);
