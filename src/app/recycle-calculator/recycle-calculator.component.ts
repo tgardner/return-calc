@@ -5,7 +5,7 @@ import { interval } from 'rxjs';
 const timeInterval = interval(50);
 
 class SlotValue {
-  constructor(public flightTime: number) {
+  constructor(public planet: number, public flightTime: number) {
     this.remaining = flightTime;
   }
 
@@ -21,16 +21,14 @@ class SlotValue {
 export class RecycleCalculatorComponent {
 
   // planet number, flight time
-  public planets: Map<number, SlotValue> = new Map<number, SlotValue>();
+  public planets: SlotValue[] = [];
   public show: boolean = false;
   public started: boolean = false;
+  public selected: SlotValue;
   private calculator: Calculator;
   private timer: any;
 
   constructor() {
-    for(var i = 1; i <= 15; ++i) {
-      this.planets.set(i, null);
-    }
   }
 
   public calculate(calculator: Calculator): void {
@@ -41,6 +39,7 @@ export class RecycleCalculatorComponent {
   }
 
   private reset(): void {
+    this.selected = null;
     var flightTime = this.calculator.calculateFlightTime();
 
     if(isNaN(flightTime) || flightTime === Infinity) {
@@ -49,17 +48,18 @@ export class RecycleCalculatorComponent {
     }
     this.show = true;
 
-    for(var i = 1; i <= 15; ++i) {
-      this.calculator.end.planet = i;
-      this.planets.set(i, new SlotValue(this.calculator.calculateFlightTime()));
+    this.planets = [];
+    for(var i = 0; i < 15; ++i) {
+      this.calculator.end.planet = i + 1;
+      this.planets.push(new SlotValue(i + 1, this.calculator.calculateFlightTime()));
     }
   }
 
   public start(): void {
     this.started = true;
 
-    for(var i = 1; i <= 15; ++i) {
-      var planet = this.planets.get(i);
+    for(var i = 0; i < 15; ++i) {
+      var planet = this.planets[i];
       planet.endTime = new Date();
       planet.endTime.setTime(planet.endTime.getTime() + planet.remaining * 1000);
     }
@@ -80,8 +80,8 @@ export class RecycleCalculatorComponent {
   private tick(): void {
     var now = new Date();
     var stop = true;
-    for(var i = 1; i <= 15; ++i) {
-      var planet = this.planets.get(i);
+    for(var i = 0; i < 15; ++i) {
+      var planet = this.planets[i];
       if(planet.endTime < now) {
         planet.remaining = 0;
         continue;

@@ -12,6 +12,14 @@
       [hidden]="!started"
       class="btn btn-lg btn-danger">Stop</button>
   </p>
+  <div [hidden]="!selected || !started">
+      <h2 [hidden]="!started" class="text-center">
+        Slot {{selected?.planet}} -
+        <span [hidden]="selected?.remaining > 0">Arrived</span>
+        <span [hidden]="selected?.remaining == 0">{{selected?.remaining | time}}</span>
+      </h2>
+      <h3 [hidden]="!started">Arrival: {{selected?.endTime}}</h3>
+  </div>
   <div class="table-responsive">
     <table class="table table-hover">
       <thead>
@@ -20,13 +28,14 @@
           <th>Arrival</th>
           <th style="width: 50%;">End Time</th>
         </tr>
-        <tr *ngFor="let planet of planets | keyvalue">
-          <td scope="row">{{planet.key}}</td>
+        <tr *ngFor="let planet of planets" (click)="selected = planet"
+          [ngClass]="{'active': selected?.planet == planet.planet}">
+          <td scope="row">{{planet.planet}}</td>
           <td>
-            <span [hidden]="planet.value?.remaining > 0">Arrived</span>
-            <span [hidden]="planet.value?.remaining == 0">{{planet.value?.remaining | time}}</span>
+            <span [hidden]="planet.remaining > 0">Arrived</span>
+            <span [hidden]="planet.remaining == 0">{{planet.remaining | time}}</span>
           </td>
-          <td>{{planet.value?.endTime}}</td>
+          <td>{{planet.endTime}}</td>
         </tr>
       </thead>
     </table>
