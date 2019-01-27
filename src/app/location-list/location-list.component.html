@@ -1,5 +1,28 @@
-<div>
+<div class="container-fluid">
   <h2>Location List</h2>
+
+  <div>
+    <div>
+      <div class="input-group">
+        <input type="text" [(ngModel)]="searchTerm" placeholder="Player Name" class="form-control" />
+
+        <div class="input-group-append">
+          <button type="button" class="btn btn-primary" (click)="search()">
+              <span class="fa fa-search"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div>
+      <ol>
+        <li *ngFor="let result of searchResults">
+          {{result.player}} - {{result.location}}
+        </li>
+      </ol>
+    </div>
+  </div>
 
   <div class="row">
     <div class="col-md-4 offset-md-4">
@@ -9,8 +32,8 @@
               <span class="fa fa-arrow-left"></span>
           </button>
         </div>
-        <input type="number" [(ngModel)]="galaxy" (change)="onChange()" placeholder="Galaxy" class="input-sm form-control" />
-        <input type="number" [(ngModel)]="system" (change)="onChange()" placeholder="System" class="input-sm form-control" />
+        <input type="number" [(ngModel)]="galaxy" (change)="onChange()" placeholder="Galaxy" class="form-control" />
+        <input type="number" [(ngModel)]="system" (change)="onChange()" placeholder="System" class="form-control" />
         <div class="input-group-append">
           <button type="button" class="btn btn-primary" (click)="system = Math.min(system + 1, 250); onChange()">
               <span class="fa fa-arrow-right"></span>

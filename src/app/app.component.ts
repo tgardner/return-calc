@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Return Time Calculator';
+  public isNavbarCollapsed: boolean = false;
+  title = 'CKD Pwnage Machine';
 }
