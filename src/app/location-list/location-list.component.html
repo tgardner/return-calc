@@ -4,7 +4,7 @@
   <div>
     <div>
       <div class="input-group">
-        <input type="text" [(ngModel)]="searchTerm" placeholder="Player Name" class="form-control" />
+        <input type="text" [(ngModel)]="searchTerm" (keypress)="catchSearchEnter($event)" placeholder="Player Name" class="form-control" />
 
         <div class="input-group-append">
           <button type="button" class="btn btn-primary" (click)="search()">
@@ -32,8 +32,8 @@
               <span class="fa fa-arrow-left"></span>
           </button>
         </div>
-        <input type="number" [(ngModel)]="galaxy" (change)="onChange()" placeholder="Galaxy" class="form-control" />
-        <input type="number" [(ngModel)]="system" (change)="onChange()" placeholder="System" class="form-control" />
+        <input type="number" [(ngModel)]="galaxy" (change)="onChange()" min="1" max="3" placeholder="Galaxy" class="form-control" />
+        <input type="number" [(ngModel)]="system" (change)="onChange()" min="1" max="250" placeholder="System" class="form-control" />
         <div class="input-group-append">
           <button type="button" class="btn btn-primary" (click)="system = Math.min(system + 1, 250); onChange()">
               <span class="fa fa-arrow-right"></span>

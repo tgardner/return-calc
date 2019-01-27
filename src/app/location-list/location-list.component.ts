@@ -43,6 +43,12 @@ export class LocationListComponent implements OnInit {
     this.players = players;
   }
 
+  public catchSearchEnter($event: any):void {
+    if($event.keyCode == 13) {
+      this.search();
+    }
+  }
+
   public search() : void {
     if(!this.galaxyData) return;
 
