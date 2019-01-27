@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Planet } from '../planet';
+
+const GALAXY_ROWS: number = 17;
 
 @Component({
   selector: 'app-location-list',
@@ -50,36 +53,44 @@ export class LocationListComponent implements OnInit {
   }
 
   public search() : void {
-    if(!this.galaxyData) return;
+    if(!this.galaxyData || !this.searchTerm) return;
 
     var json = this.galaxyData;
     var results = [];
     for(var row = 0; row < json.table.rows.length; ++row) {
       var r = json.table.rows[row];
-      if(!r) continue;
+      if(!r || row % GALAXY_ROWS < 1) continue;
 
       for(var col = 0; col < json.table.cols.length; ++col) {
           var c = r.c[col];
-          if(!c || !c.v) continue;
+          if(!c || !c.v || col === 0) continue;
 
           if(c.v.toString().toLowerCase().indexOf(this.searchTerm.toLowerCase()) >= 0) {
-            var system = col;
-            var galaxy = Math.floor(row / 17) + 1;
-            var planet = row - ((galaxy - 1) * 17);
-            var location: string = galaxy.toString() + ":" + system.toString() + ":" + planet.toString();
-            results.push({location: location, player: c.v.toString()});
+            var planet = this.getLocation(row, col);
+            results.push({
+              location: planet,
+              player: c.v.toString()
+            });
           }
       }
     }
+
     results.sort(function(a,b) {
-      var aP = a.location.split(":");
-      var bP = b.location.split(":");
-      if(aP[0] != bP[0]) return parseInt(aP[0]) < parseInt(bP[0]) ? -1 : 1;
-      if(aP[1] != bP[1]) return parseInt(aP[1]) < parseInt(bP[1]) ? -1 : 1;
-      if(aP[2] != bP[2]) return parseInt(aP[2]) < parseInt(bP[2]) ? -1 : 1;
-      return 0;
+      if(a.player !== b.player)
+        return a.player < b.player ? -1 : 1;
+
+      return Planet.sort(a.location, b.location);
     });
+
     this.searchResults = results;
+  }
+
+  private getLocation(row: number, col: number) : Planet {
+    var galaxy = Math.floor(row / GALAXY_ROWS) + 1
+    var system = col;
+    var planet = row % GALAXY_ROWS + (galaxy - 1);
+
+    return new Planet(galaxy, system, planet);
   }
 
   private parseResponse(response: string) : object {
@@ -90,7 +101,7 @@ export class LocationListComponent implements OnInit {
   }
 
   private getOffset() : number {
-    return 16 * (this.galaxy - 1) + 1;
+    return (GALAXY_ROWS - 1) * this.galaxy - (GALAXY_ROWS - 2);
   }
 
 }

@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
-import { Calculator, Planet } from '../calculator';
+import { Calculator } from '../calculator';
 import { DeployCalculatorComponent } from '../deploy-calculator/deploy-calculator.component';
 import { RecycleCalculatorComponent } from '../recycle-calculator/recycle-calculator.component';
+import { Planet } from '../planet';
 
 enum CalculatorType {
   Deploy,

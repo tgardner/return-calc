@@ -1,5 +1,6 @@
 import { Drive } from './drive.enum';
 import { Ship, SHIPS } from './ship';
+import { Planet } from './planet';
 
 export class Calculator {
   constructor(
@@ -79,12 +80,4 @@ export class Calculator {
 
     return result;
   }
-};
-
-export class Planet {
-  constructor(
-    public galaxy: number,
-    public system: number,
-    public planet: number,
-  ){}
 };
