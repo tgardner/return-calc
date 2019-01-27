@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -32,7 +32,10 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     NgbModule,
     HttpClientModule
   ],
-  providers: [TimePipe],
+  providers: [
+    TimePipe,
+    Title
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
