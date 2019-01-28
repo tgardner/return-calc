@@ -25,7 +25,7 @@ export class LocationListComponent implements OnInit {
   }
 
   ngOnInit() {
-      var url: string = this.dataSheet + "/gviz/tq";
+      var url: string = this.dataSheet + "/gviz/tq?headers=1";
       // Load galaxy
       this.http.get(url, {responseType: 'text'})
         .subscribe((response) => {
