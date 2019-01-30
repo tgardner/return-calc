@@ -25,13 +25,17 @@ export class LocationListComponent implements OnInit {
   }
 
   ngOnInit() {
-      var url: string = this.dataSheet + "/gviz/tq?headers=1";
+      var url: string = this.dataSheet + "/gviz/tq";
       // Load galaxy
-      this.http.get(url, {responseType: 'text'})
-        .subscribe((response) => {
-          this.galaxyData = this.parseResponse(response);
-            this.onChange();
-        });
+      this.http.get(url, {
+        responseType: 'text',
+        params: {
+          headers: "0"
+        }
+      }).subscribe((response) => {
+        this.galaxyData = this.parseResponse(response);
+          this.onChange();
+      });
   }
 
   public onChange() : void {
