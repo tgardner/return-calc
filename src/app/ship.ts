@@ -1,12 +1,21 @@
 import { Drive } from './drive.enum';
 
-export class Ship {
-  name: string;
-  speed1: number;
-  speed2: number;
-  engine: Drive;
-  capacity: number;
-  selected: boolean = false;
+export interface IShipCost {
+  metal: number;
+  crystal: number;
+  deuterium: number;
+}
+
+export class Ship implements IShipCost {
+  public name: string;
+  public speed1: number;
+  public speed2: number;
+  public engine: Drive;
+  public capacity: number;
+  public selected: boolean = false;
+  public metal: number = 0;
+  public crystal: number = 0;
+  public deuterium: number = 0;
 }
 export const SHIPS: Ship[] = [
   {
@@ -15,7 +24,10 @@ export const SHIPS: Ship[] = [
     speed2: 10000,
     engine: Drive.Combustion,
     capacity: 5000,
-    selected: false
+    selected: false,
+    metal: 2000,
+    crystal: 2000,
+    deuterium: 0
   },
   {
     name: "Large Cargo",
@@ -23,7 +35,10 @@ export const SHIPS: Ship[] = [
     speed2: 0,
     engine: Drive.Combustion,
     capacity: 25000,
-    selected: false
+    selected: false,
+    metal: 6000,
+    crystal: 6000,
+    deuterium: 0
   },
   {
     name: "Light Fighter",
@@ -31,7 +46,10 @@ export const SHIPS: Ship[] = [
     speed2: 0,
     engine: Drive.Combustion,
     capacity: 50,
-    selected: false
+    selected: false,
+    metal: 3000,
+    crystal: 1000,
+    deuterium: 0
   },
   {
     name: "Heavy Fighter",
@@ -39,7 +57,10 @@ export const SHIPS: Ship[] = [
     speed2: 0,
     engine: Drive.Impulse,
     capacity: 100,
-    selected: false
+    selected: false,
+    metal: 6000,
+    crystal: 4000,
+    deuterium: 0
   },
   {
     name: "Cruiser",
@@ -47,7 +68,10 @@ export const SHIPS: Ship[] = [
     speed2: 0,
     engine: Drive.Impulse,
     capacity: 800,
-    selected: false
+    selected: false,
+    metal: 20000,
+    crystal: 7000,
+    deuterium: 2000
   },
   {
     name: "Battleship",
@@ -55,7 +79,10 @@ export const SHIPS: Ship[] = [
     speed2: 0,
     engine: Drive.Hyperspace,
     capacity: 1500,
-    selected: false
+    selected: false,
+    metal: 45000,
+    crystal: 15000,
+    deuterium: 0
   },
   {
     name: "Colony Ship",
@@ -63,7 +90,10 @@ export const SHIPS: Ship[] = [
     speed2: 0,
     engine: Drive.Impulse,
     capacity: 7500,
-    selected: false
+    selected: false,
+    metal: 10000,
+    crystal: 20000,
+    deuterium: 10000
   },
   {
     name: "Recycler",
@@ -71,7 +101,10 @@ export const SHIPS: Ship[] = [
     speed2: 0,
     engine: Drive.Combustion,
     capacity: 20000,
-    selected: false
+    selected: false,
+    metal: 10000,
+    crystal: 6000,
+    deuterium: 2000
   },
   {
     name: "Espionage Probe",
@@ -79,7 +112,10 @@ export const SHIPS: Ship[] = [
     speed2: 0,
     engine: Drive.Combustion,
     capacity: 0,
-    selected: false
+    selected: false,
+    metal: 0,
+    crystal: 1000,
+    deuterium: 0
   },
   {
     name: "Bomber",
@@ -87,7 +123,10 @@ export const SHIPS: Ship[] = [
     speed2: 5000,
     engine: Drive.Impulse,
     capacity: 500,
-    selected: false
+    selected: false,
+    metal: 50000,
+    crystal: 25000,
+    deuterium: 15000
   },
   {
     name: "Destroyer",
@@ -95,7 +134,10 @@ export const SHIPS: Ship[] = [
     speed2: 0,
     engine: Drive.Hyperspace,
     capacity: 2000,
-    selected: false
+    selected: false,
+    metal: 60000,
+    crystal: 50000,
+    deuterium: 15000
   },
   {
     name: "Deathstar",
@@ -103,7 +145,10 @@ export const SHIPS: Ship[] = [
     speed2: 0,
     engine: Drive.Hyperspace,
     capacity: 1000000,
-    selected: false
+    selected: false,
+    metal: 5000000,
+    crystal: 4000000,
+    deuterium: 1000000
   },
   {
     name: "Battlecruiser",
@@ -111,6 +156,9 @@ export const SHIPS: Ship[] = [
     speed2: 0,
     engine: Drive.Hyperspace,
     capacity: 750,
-    selected: false
+    selected: false,
+    metal: 30000,
+    crystal: 40000,
+    deuterium: 15000
   }
 ];

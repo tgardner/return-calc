@@ -13,6 +13,7 @@ import { DeployCalculatorComponent } from './deploy-calculator/deploy-calculator
 import { RecycleCalculatorComponent } from './recycle-calculator/recycle-calculator.component';
 import { LocationListComponent } from './location-list/location-list.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ProfitCalculatorComponent } from './profit-calculator/profit-calculator.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     DeployCalculatorComponent,
     RecycleCalculatorComponent,
     LocationListComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ProfitCalculatorComponent
   ],
   imports: [
     BrowserModule,

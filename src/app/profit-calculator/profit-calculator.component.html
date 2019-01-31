@@ -1,0 +1,125 @@
+<div class="container-fluid">
+  <h2>Profit Calculator</h2>
+  <div class="row">
+    <div class="col-md-12">
+      <textarea [(ngModel)]="report" style="height: 5em;" class="form-control">
+      </textarea>
+    </div>
+  </div>
+  <div class="row top-buffer">
+    <div class="col-1">
+      <button type="button" class="btn btn-primary" (click)="parse()">
+        <span class="fa fa-search"></span> Parse
+      </button>
+    </div>
+    <div class="text-right col-11">
+      <button type="button" class="btn btn-secondary" (click)="clear()">
+        <span class="fa fa-trash"></span> Clear
+      </button>
+    </div>
+  </div>
+  <div *ngIf="battleReport !== undefined" class="top-buffer">
+    <h3>Winner: {{battleReport.winner == 0 ? "Attacker" : "Defender"}}</h3>
+    <h3>Losses</h3>
+    <h4>Attackers</h4>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <td>Player</td>
+          <td>Metal</td>
+          <td>Crystal</td>
+          <td>Deuterium</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let player of battleReport.attackers | keyvalue">
+          <td>{{player.value.name}}</td>
+          <td>{{player.value.losses.metal | number}}</td>
+          <td>{{player.value.losses.crystal | number}}</td>
+          <td>{{player.value.losses.deuterium | number}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <h4>Defenders</h4>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <td>Player</td>
+          <td>Metal</td>
+          <td>Crystal</td>
+          <td>Deuterium</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let player of battleReport.defenders | keyvalue">
+          <td>{{player.value.name}}</td>
+          <td>{{player.value.losses.metal | number}}</td>
+          <td>{{player.value.losses.crystal | number}}</td>
+          <td>{{player.value.losses.deuterium | number}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>Resources</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <td></td>
+          <td>Metal</td>
+          <td>Crystal</td>
+          <td>Deuterium</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Obtained</td>
+          <td>{{battleReport.resources.metal | number}}</td>
+          <td>{{battleReport.resources.crystal | number}}</td>
+          <td>{{battleReport.resources.deuterium | number}}</td>
+        </tr>
+        <tr>
+          <td>Debris</td>
+          <td>{{battleReport.debris.metal | number}}</td>
+          <td>{{battleReport.debris.crystal | number}}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Losses</td>
+          <td>{{battleReport.losses.metal | number}}</td>
+          <td>{{battleReport.losses.crystal | number}}</td>
+          <td>{{battleReport.losses.deuterium | number}}</td>
+        </tr>
+        <tr>
+          <td>Profit</td>
+          <td>{{battleReport.profit.metal | number}}</td>
+          <td>{{battleReport.profit.crystal | number}}</td>
+          <td>{{battleReport.profit.deuterium | number}}</td>
+        </tr>
+        <tr>
+          <td><strong>Dividend</strong></td>
+          <td><strong>{{battleReport.dividend.metal | number}}</strong></td>
+          <td><strong>{{battleReport.dividend.crystal | number}}</strong></td>
+          <td><strong>{{battleReport.dividend.deuterium | number}}</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>Distribution (Losses + Dividend)</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <td>Player</td>
+          <td>Metal</td>
+          <td>Crystal</td>
+          <td>Deuterium</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let player of battleReport.winningPlayers | keyvalue">
+          <td>{{player.value.name}}</td>
+          <td>{{player.value.losses.metal + battleReport.dividend.metal | number}}</td>
+          <td>{{player.value.losses.crystal + battleReport.dividend.crystal | number}}</td>
+          <td>{{player.value.losses.deuterium + battleReport.dividend.deuterium | number}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
