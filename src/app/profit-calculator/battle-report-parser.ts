@@ -111,11 +111,11 @@ export class BattleReportParser {
     for(var i = 0; i < lines.length; ++i) {
       var line = lines[i];
 
-      if(line === "Round 1") {
+      if(line.indexOf("Round 1") >= 0) {
         round1 = true;
         buffer = [];
         continue;
-      } else if (line === "END OF BATTLE") {
+      } else if (line.indexOf("END OF BATTLE") >= 0) {
         endOfBattle = true;
         buffer = [];
         continue;
@@ -136,6 +136,7 @@ export class BattleReportParser {
         round1 = false;
         // Parse buffer
         this.extractInitialPlayers(result, buffer);
+        console.log('test');
       }
 
       if(endOfBattle && line.indexOf("has won the battle") >= 0) {
@@ -168,7 +169,7 @@ export class BattleReportParser {
   }
 
   private fillPlayer(playerCollection: IMap<Player>, playerData: string[]) : void {
-    var name = playerData[0].split('	  ')[1];
+    var name = playerData[0].split('	  ')[1].trim();
     var player = playerCollection[name] || new Player(name);
 
     player.initial = this.createShipMap(playerData[2], playerData[3]);
@@ -193,19 +194,20 @@ export class BattleReportParser {
     for(var i = 0; i < buffer.length; ++i) {
       if(buffer[i].indexOf("Attacker") >= 0) {
         var playerData = buffer.slice(i, i + 4);
-        var name = playerData[0].split('	  ')[1];
-        var player = report.attackers[name];
-        player.final = this.createShipMap(playerData[2], playerData[3]);
-        player.calculateLosses();
+        this.fillResults(report.attackers, playerData);
         i = i + 3;
       } else if (buffer[i].indexOf("Defender") >= 0) {
         var playerData = buffer.slice(i, i + 4);
-        var name = playerData[0].split('	  ')[1];
-        var player = report.defenders[name];
-        player.final = this.createShipMap(playerData[2], playerData[3]);
-        player.calculateLosses();
+        this.fillResults(report.defenders, playerData);
         i = i + 3;
       }
     }
+  }
+
+  private fillResults(playerCollection: IMap<Player>, playerData: string[]) : void {
+    var name = playerData[0].split('	  ')[1].trim();
+    var player = playerCollection[name];
+    player.final = this.createShipMap(playerData[2], playerData[3]);
+    player.calculateLosses();
   }
 }
