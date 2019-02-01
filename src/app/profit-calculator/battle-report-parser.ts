@@ -27,6 +27,7 @@ class Player {
 
   public loadShips(shipString: string, amountString: string, initial: boolean = true) : void {
     var map :IMap<number> = initial ? this.initial : this.final;
+    if(!shipString) return;
     var ships = shipString.split('\t');
     var amounts = amountString.split('\t').map(a => parseInt(a));
 
