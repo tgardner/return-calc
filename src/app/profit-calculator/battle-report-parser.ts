@@ -108,13 +108,7 @@ export class BattleReport {
 }
 
 export class BattleReportParser {
-  private allowShips: string[];
-  private santizeNumber = /[\,\']/g;
-
   public constructor(private report: string) {
-    this.allowShips = SHIPS.map(function(s) {
-      return s.name;
-    });
   }
 
   public parse() : BattleReport {
@@ -134,16 +128,16 @@ export class BattleReportParser {
         var regex = /obtaining ([0-9,]+) Metal, ([0-9,]+) Crystal and ([0-9,]+) Deuterium/gi;
         var matches = regex.exec(line);
         result.resources = {
-          metal: parseInt(matches[1].replace(this.santizeNumber,'')),
-          crystal: parseInt(matches[2].replace(this.santizeNumber,'')),
-          deuterium: parseInt(matches[3].replace(this.santizeNumber,''))
+          metal: this.santizeNumber(matches[1]),
+          crystal: this.santizeNumber(matches[2]),
+          deuterium: this.santizeNumber(matches[3])
         };
       } else if (line.indexOf("A debris field of") >= 0) {
         var regex = /A debris field of ([0-9,']+) Metal and ([0-9,']+) Crystal/gi;
         var matches = regex.exec(line);
         result.debris = {
-          metal: parseInt(matches[1].replace(this.santizeNumber,'')),
-          crystal: parseInt(matches[2].replace(this.santizeNumber,'')),
+          metal: this.santizeNumber(matches[1]),
+          crystal: this.santizeNumber(matches[2]),
           deuterium: 0
         };
       }
@@ -162,6 +156,11 @@ export class BattleReportParser {
     }
 
     return result;
+  }
+
+  private santizeNumber(input: string): number {
+    const santizeRegex = /[\,\']/g;
+    return parseInt(input.replace(santizeRegex,''));
   }
 
   private fillPlayer(playerCollection: IMap<Player>, playerData: string[], initial: boolean = true) : void {
