@@ -7,7 +7,7 @@ import { BattleReportParser, BattleReport } from './battle-report-parser';
   styleUrls: ['./profit-calculator.component.scss']
 })
 export class ProfitCalculatorComponent implements OnInit {
-  public report: string = "";
+  public report: string = ``;
   public battleReport: BattleReport;
 
   constructor() { }
@@ -17,8 +17,7 @@ export class ProfitCalculatorComponent implements OnInit {
 
   public parse():void {
     var parser : BattleReportParser = new BattleReportParser(this.report);
-    var battleReport = parser.parse();
-    this.battleReport = battleReport;
+    this.battleReport = parser.parse();
   }
 
   public clear(): void {
