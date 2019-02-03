@@ -24,16 +24,22 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-sm-6">
+  <div class="col-sm-4">
     <label for="modifier">Universe Speed:</label>
     <select id="modifier" [(ngModel)]="model.modifier" (change)="onChange()" class="input-sm form-control">
       <option *ngFor="let modifier of modifiers" [ngValue]="modifier">{{modifier}}x</option>
     </select>
   </div>
-  <div class="col-sm-6">
+  <div class="col-sm-4">
     <label for="speed">Fleet Speed:</label>
     <select id="speed" [(ngModel)]="model.speed" (change)="onChange()" class="input-sm form-control">
       <option *ngFor="let speed of speeds" [ngValue]="speed">{{speed*100}}%</option>
+    </select>
+  </div>
+  <div class="col-sm-4">
+    <label for="admiral">Admiral Bonus:</label>
+    <select id="admiral" [(ngModel)]="model.admiral" (change)="onChange()" class="input-sm form-control">
+      <option *ngFor="let bonus of admiralBonuses" [ngValue]="bonus">{{bonus*100}}%</option>
     </select>
   </div>
 </div>

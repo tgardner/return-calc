@@ -14,6 +14,7 @@ export class Calculator {
   public impulse: number;
   public hyperspace: number;
   public ships: Ship[] = SHIPS;
+  public admiral: number = 0;
 
   public calculateFlightTime(): number {
     var d = this.calculateDistance();
@@ -73,8 +74,9 @@ export class Calculator {
         level = this.hyperspace;
         bonus = .3;
       }
+      
+      speed = speed * (1 + (level * bonus)) + (speed * this.admiral);
 
-      speed = speed * (1 + (level * bonus));
       if(!result || result > speed) result = speed;
     }
 
