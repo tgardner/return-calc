@@ -164,7 +164,7 @@ export class BattleReportParser {
   }
 
   private fillPlayer(playerCollection: IMap<Player>, playerData: string[], initial: boolean = true) : void {
-    var name = playerData[0].split('	  ')[1].trim();
+    var name = playerData[0].split(/\s+/)[1].trim();
     var player: Player = playerCollection[name];
     if(!player) {
       playerCollection[name] = player = new Player(name);
