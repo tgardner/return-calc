@@ -1,9 +1,16 @@
 <div class="container-fluid">
   <h2>Profit Calculator</h2>
+  <label>
+    <input type="checkbox" [(ngModel)]="debug" /> Enable Debug Mode
+  </label>
   <div class="row">
     <div class="col-md-12">
-      <textarea [(ngModel)]="report" style="height: 5em;" class="form-control">
-      </textarea>
+      <ckeditor [editor]="Editor" [(ngModel)]="report" [config]="{ toolbar: [] }"></ckeditor>
+      <!-- <textarea [(ngModel)]="report" style="height: 5em;" class="form-control">
+      </textarea> -->
+      <div *ngIf="debug">
+        {{report}}
+      </div>
     </div>
   </div>
   <div class="row top-buffer">

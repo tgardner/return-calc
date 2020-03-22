@@ -1,4 +1,5 @@
 import { SHIPS, IShipCost } from '../ship';
+
 const allowedShips: string[] = SHIPS.map(s => s.name);
 
 interface IMap<T> {
@@ -67,8 +68,8 @@ enum Winner {
 export class BattleReport {
   public attackers: IMap<Player> = {};
   public defenders: IMap<Player> = {};
-  public debris: IShipCost;
-  public resources: IShipCost;
+  public debris: IShipCost = { metal: 0, crystal: 0, deuterium: 0 };
+  public resources: IShipCost = { metal: 0, crystal: 0, deuterium: 0 };
   public get profit(): IShipCost {
     return {
       metal: this.resources.metal + this.debris.metal - this.losses.metal,
@@ -110,95 +111,82 @@ export class BattleReport {
 }
 
 export class BattleReportParser {
-
-  private playerRegex = /^(.*) \[\d{1}:\d{1,3}:\d{1,3} \([MP]\)\]/;
-
   public constructor(private report: string) {
   }
 
   public parse(): BattleReport {
-    var lines: string[] = this.report.split('\n');
-    var bufferStart: number = 0;
-    var result: BattleReport = new BattleReport();
-    var attackerWon = false;
+    let result = new BattleReport();
+    let parser = new DOMParser();
+    let reportDoc = parser.parseFromString(this.report, 'text/html');
 
-    for (var i = 0; i < lines.length; ++i) {
-      var line = lines[i];
-      if (line.indexOf("Beginning of Battle") >= 0) {
-        bufferStart = i;
-      } else if (line.indexOf("End of Battle") >= 0) {
-        var roundData = lines.slice(bufferStart, i);
-        this.parseRound(result, roundData, true);
-        bufferStart = i;
-      } else if (line.indexOf("After Round 1") >= 0) {
-        var roundData = lines.slice(bufferStart, i);
-        this.parseRound(result, roundData, false);
-      } else if (line.indexOf("obtaining") >= 0) {
-        var regex = /obtaining ([0-9,]+) Metal, ([0-9,]+) Crystal and ([0-9,]+) Deuterium/gi;
-        var matches = regex.exec(line);
-        result.resources = {
-          metal: this.santizeNumber(matches[1]),
-          crystal: this.santizeNumber(matches[2]),
-          deuterium: this.santizeNumber(matches[3])
-        };
-      } else if (line.indexOf("A debris field of") >= 0) {
-        var regex = /A debris field of ([0-9,']+) Metal and ([0-9,']+) Crystal/gi;
-        var matches = regex.exec(line);
-        result.debris = {
-          metal: this.santizeNumber(matches[1]),
-          crystal: this.santizeNumber(matches[2]),
-          deuterium: 0
-        };
-      }
-
-      if (line.indexOf("The attacker has won the battle") >= 0) {
-        attackerWon = true;
-      }
+    var header = reportDoc.querySelector("p").textContent;
+    var obtainedRegex = /obtaining ([0-9,]+) Metal, ([0-9,]+) Crystal and ([0-9,]+) Deuterium/gi;
+    var matches = obtainedRegex.exec(header);
+    if (matches != null) {
+      result.resources = {
+        metal: this.santizeNumber(matches[1]),
+        crystal: this.santizeNumber(matches[2]),
+        deuterium: this.santizeNumber(matches[3])
+      };
     }
 
-    result.winner = attackerWon ? Winner.Attacker : Winner.Defender;
+    var debrisRegex = /debris\sfield\sof\s([0-9,']+)\smetal\sand\s([0-9,']+)\scrystal/i;
+    var matches = debrisRegex.exec(header);
+    if (matches != null) {
+      result.debris = {
+        metal: this.santizeNumber(matches[1]),
+        crystal: this.santizeNumber(matches[2]),
+        deuterium: 0
+      };
+    }
+
+    result.winner = header.indexOf("The attacker has won the battle") >= 0 ?
+      Winner.Attacker : Winner.Defender;
+
+    // Load Initial
+    var attackers = reportDoc.querySelectorAll('table td:first-child');
+    var defenders = reportDoc.querySelectorAll('table td:last-child');
+    this.parsePlayers(result.attackers, attackers[0].textContent, true);
+    this.parsePlayers(result.defenders, defenders[0].textContent, true);
+
+    // Load Final
+    this.parsePlayers(result.attackers, attackers[1].textContent, false);
+    this.parsePlayers(result.defenders, defenders[1].textContent, false);
 
     return result;
+  }
+
+  private parsePlayers(collection: IMap<Player>, input: string, initial: boolean = false): void {
+    var unparsed = input;
+    var nameRegex = /\s?([^\s]+)\s\[\d:\d{1,3}:\d{1,3}\s\([MP]\)\]/i;
+    var match = unparsed.match(nameRegex);
+    while (match != null) {
+      var name = match[1];
+      if (!collection[name]) {
+        collection[name] = new Player(name);
+      }
+
+      var player = collection[name];
+      var ships = [];
+
+      unparsed = unparsed.replace(nameRegex, "").replace(/WSA:[0-9+%/]+Ships/i, "");
+      var shipRegex = /^([A-Za-z\s]+)([0-9,]+)/i
+      var shipMatch = unparsed.match(shipRegex);
+
+      while (shipMatch != null) {
+        ships.push(shipMatch[1] + "\t" + this.santizeNumber(shipMatch[2]));
+        unparsed = unparsed.replace(shipRegex, "");
+        shipMatch = unparsed.match(shipRegex);
+        console.log(unparsed)
+
+      }
+      player.loadShips(ships, initial);
+      match = unparsed.match(nameRegex);
+    }
   }
 
   private santizeNumber(input: string): number {
     const santizeRegex = /[\,\']/g;
     return parseInt(input.replace(santizeRegex, ''));
-  }
-
-  private fillPlayer(report: BattleReport, playerData: string[], initial = true, lastPlayer = false): void {
-    var name = playerData[0].match(this.playerRegex)[1];
-    var defender = false;
-    if (initial && (playerData.indexOf("Destroyed") >= 0 || playerData.indexOf("Defense") >= 0) || lastPlayer) {
-      defender = true;
-    } else if (!initial) {
-      defender = !!report.defenders[name];
-    }
-    var playerCollection = defender ? report.defenders : report.attackers;
-    var player: Player = playerCollection[name];
-
-    if (!player) {
-      playerCollection[name] = player = new Player(name);
-    }
-    playerData.splice(0, 3);
-    player.loadShips(playerData, initial);
-  }
-
-  private parseRound(report: BattleReport, buffer: string[], initial: boolean = true): void {
-    var startIndex = 0;
-    for (var i = 0; i < buffer.length; ++i) {
-      if (this.playerRegex.test(buffer[i])) {
-        if (startIndex === 0) {
-          startIndex = i;
-          continue;
-        }
-
-        var playerData = buffer.slice(startIndex, i);
-        startIndex = i;
-        this.fillPlayer(report, playerData, initial, false);
-      }
-    }
-    var playerData = buffer.slice(startIndex);
-    this.fillPlayer(report, playerData, initial, true);
   }
 }
