@@ -1,9 +1,9 @@
-import {SHIPS, IShipCost} from '../ship';
-const allowedShips :string[] = SHIPS.map(s => s.name);
+import { SHIPS, IShipCost } from '../ship';
+const allowedShips: string[] = SHIPS.map(s => s.name);
 
 interface IMap<T> {
-    [index: string]: T;
-    [index: number]: T;
+  [index: string]: T;
+  [index: number]: T;
 }
 
 class ShipCost implements IShipCost {
@@ -25,20 +25,22 @@ class Player {
   public constructor(public name: string) {
   }
 
-  public loadShips(shipString: string, amountString: string, initial: boolean = true) : void {
-    var map :IMap<number> = initial ? this.initial : this.final;
-    if(!shipString) return;
-    var ships = shipString.split('\t');
-    var amounts = amountString.split('\t').map(a => parseInt(a));
+  public loadShips(ships: string[], initial: boolean = true): void {
+    var map: IMap<number> = initial ? this.initial : this.final;
 
-    for(var i = 0; i < ships.length; ++i) {
-      var ship = ships[i];
-      if(allowedShips.indexOf(ship) < 0) continue;
-      map[ship] = (map[ship] || 0) + amounts[i];
+    for (var i = 0; i < ships.length; ++i) {
+      var shipString = ships[i];
+      var matches = shipString.match("^(.*)\t(.+)$");
+      if (!matches) continue;
+
+      var ship = matches[1];
+      var amount = parseInt(matches[2].replace(",", ""));
+      if (allowedShips.indexOf(ship) < 0) continue;
+      map[ship] = (map[ship] || 0) + amount;
     }
   }
 
-  private calculateLosses() : IShipCost {
+  private calculateLosses(): IShipCost {
     var losses: IShipCost = new ShipCost();
 
     const reducer = (acc, c) => {
@@ -84,7 +86,7 @@ export class BattleReport {
       deuterium: Math.round(this.profit.deuterium / players)
     };
   }
-  public get winningPlayers():IMap<Player> {
+  public get winningPlayers(): IMap<Player> {
     return (this.winner === Winner.Attacker) ? this.attackers : this.defenders;
   }
   public get losses(): IShipCost {
@@ -93,7 +95,7 @@ export class BattleReport {
   public winner: Winner = Winner.Defender;
 
   private calculateLosses(): IShipCost {
-    var losses :IShipCost = new ShipCost();
+    var losses: IShipCost = new ShipCost();
 
     var playerCollection: IMap<Player> = this.winningPlayers;
     const reducer = (acc, c) => {
@@ -108,23 +110,30 @@ export class BattleReport {
 }
 
 export class BattleReportParser {
+
+  private playerRegex = /^(.*) \[\d{1}:\d{1,3}:\d{1,3} \([MP]\)\]/;
+
   public constructor(private report: string) {
   }
 
-  public parse() : BattleReport {
+  public parse(): BattleReport {
     var lines: string[] = this.report.split('\n');
-    var buffering: boolean = false;
     var bufferStart: number = 0;
     var result: BattleReport = new BattleReport();
+    var attackerWon = false;
 
-    for(var i = 0; i < lines.length; ++i) {
+    for (var i = 0; i < lines.length; ++i) {
       var line = lines[i];
-
-      if(line.indexOf("Round 1") >= 0 || line.indexOf("END OF BATTLE") >= 0) {
-        buffering = true;
+      if (line.indexOf("Beginning of Battle") >= 0) {
         bufferStart = i;
-        continue;
-      } else if(line.indexOf("obtaining") >= 0) {
+      } else if (line.indexOf("End of Battle") >= 0) {
+        var roundData = lines.slice(bufferStart, i);
+        this.parseRound(result, roundData, true);
+        bufferStart = i;
+      } else if (line.indexOf("After Round 1") >= 0) {
+        var roundData = lines.slice(bufferStart, i);
+        this.parseRound(result, roundData, false);
+      } else if (line.indexOf("obtaining") >= 0) {
         var regex = /obtaining ([0-9,]+) Metal, ([0-9,]+) Crystal and ([0-9,]+) Deuterium/gi;
         var matches = regex.exec(line);
         result.resources = {
@@ -142,54 +151,54 @@ export class BattleReportParser {
         };
       }
 
-      if(!buffering) continue;
-
-      if(line.indexOf("The attacking fleet fires a total force of") >= 0) {
-        buffering = false;
-        this.parseRound(result, lines.slice(bufferStart, i), true);
-      } else if (line.indexOf("has won the battle") >= 0) {
-        buffering = false
-        this.parseRound(result, lines.slice(bufferStart, i), false);
-
-        result.winner = (line.indexOf("attacker") >= 0) ? Winner.Attacker : Winner.Defender;
+      if (line.indexOf("The attacker has won the battle") >= 0) {
+        attackerWon = true;
       }
     }
+
+    result.winner = attackerWon ? Winner.Attacker : Winner.Defender;
 
     return result;
   }
 
   private santizeNumber(input: string): number {
     const santizeRegex = /[\,\']/g;
-    return parseInt(input.replace(santizeRegex,''));
+    return parseInt(input.replace(santizeRegex, ''));
   }
 
-  private fillPlayer(playerCollection: IMap<Player>, playerData: string[], initial: boolean = true) : void {
-    var name = playerData[0].split(/\s+/)[1].trim();
+  private fillPlayer(report: BattleReport, playerData: string[], initial = true, lastPlayer = false): void {
+    var name = playerData[0].match(this.playerRegex)[1];
+    var defender = false;
+    if (initial && (playerData.indexOf("Destroyed") >= 0 || playerData.indexOf("Defense") >= 0) || lastPlayer) {
+      defender = true;
+    } else if (!initial) {
+      defender = !!report.defenders[name];
+    }
+    var playerCollection = defender ? report.defenders : report.attackers;
     var player: Player = playerCollection[name];
-    if(!player) {
+
+    if (!player) {
       playerCollection[name] = player = new Player(name);
-      player.loadShips(playerData[2], playerData[3], true);
-      if(!initial) {
-        player.loadShips(playerData[2], playerData[3], false);
-      }
-    } else {
-      player.loadShips(playerData[2], playerData[3], initial);
     }
+    playerData.splice(0, 3);
+    player.loadShips(playerData, initial);
   }
 
-  private parseRound(report: BattleReport, buffer: string[], initial: boolean = true) : void {
-    const collectionMap: IMap<IMap<Player>> = {
-      "Attacker": report.attackers,
-      "Defender": report.defenders
-    };
-    for(var i = 0; i < buffer.length; ++i) {
-      for(var j in collectionMap) {
-        if(buffer[i].indexOf(j) >= 0) {
-          var playerData = buffer.slice(i, i + 4);
-          this.fillPlayer(collectionMap[j], playerData, initial);
-          i = i + 3;
+  private parseRound(report: BattleReport, buffer: string[], initial: boolean = true): void {
+    var startIndex = 0;
+    for (var i = 0; i < buffer.length; ++i) {
+      if (this.playerRegex.test(buffer[i])) {
+        if (startIndex === 0) {
+          startIndex = i;
+          continue;
         }
+
+        var playerData = buffer.slice(startIndex, i);
+        startIndex = i;
+        this.fillPlayer(report, playerData, initial, false);
       }
     }
+    var playerData = buffer.slice(startIndex);
+    this.fillPlayer(report, playerData, initial, true);
   }
 }
