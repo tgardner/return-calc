@@ -158,10 +158,12 @@ export class BattleReportParser {
 
   private parsePlayers(collection: IMap<Player>, input: string, initial: boolean = false): void {
     var unparsed = input;
-    var nameRegex = /\s?([^\s]+)\s\[\d:\d{1,3}:\d{1,3}\s\([MP]\)\]/i;
+    var nameRegex = /\s?(Destroyed)?([A-Za-z0-9_-]+)(\s\[\d:\d{1,3}:\d{1,3}\s\([MP]\)\])?(?=WSA)/i;
+    var shipRegex = new RegExp("^(" + SHIPS.map(s => s.name).join("|") + ")([0-9,]+)", "i");
+
     var match = unparsed.match(nameRegex);
     while (match != null) {
-      var name = match[1];
+      var name = match[2];
       if (!collection[name]) {
         collection[name] = new Player(name);
       }
@@ -170,15 +172,12 @@ export class BattleReportParser {
       var ships = [];
 
       unparsed = unparsed.replace(nameRegex, "").replace(/WSA:[0-9+%/]+Ships/i, "");
-      var shipRegex = /^([A-Za-z\s]+)([0-9,]+)/i
       var shipMatch = unparsed.match(shipRegex);
 
       while (shipMatch != null) {
         ships.push(shipMatch[1] + "\t" + this.santizeNumber(shipMatch[2]));
         unparsed = unparsed.replace(shipRegex, "");
         shipMatch = unparsed.match(shipRegex);
-        console.log(unparsed)
-
       }
       player.loadShips(ships, initial);
       match = unparsed.match(nameRegex);
