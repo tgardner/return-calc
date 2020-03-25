@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Calculator } from '../calculator';
-import { Ship, SHIPS } from '../ship';
+import { SHIPS } from '../ship';
 
 @Component({
   selector: 'app-calculator-controls',
@@ -18,7 +18,7 @@ export class CalculatorControlsComponent implements OnInit {
   public speeds: number[] = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1];
   public admiralBonuses: number[] = [0,.1,.2];
 
-  public ships: Ship[] = SHIPS;
+  public ships = SHIPS;
 
   constructor() {
   }
