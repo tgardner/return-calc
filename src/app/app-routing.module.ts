@@ -4,11 +4,16 @@ import { LocationListComponent } from './location-list/location-list.component';
 import { CalculatorComponent } from './calculator/calculator.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProfitCalculatorComponent } from './profit-calculator/profit-calculator.component';
+import { CalculatorGuard } from './calculator.guard';
 
 const routes: Routes = [
   { path: 'locations', component: LocationListComponent },
   { path: 'profit', component: ProfitCalculatorComponent },
-  { path: ':calculator', component: CalculatorComponent },
+  {
+    path: ':calculator',
+    component: CalculatorComponent,
+    canActivate: [CalculatorGuard]
+  },
   {
     path: '',
     redirectTo: '/deploy',

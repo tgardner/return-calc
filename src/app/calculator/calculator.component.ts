@@ -3,13 +3,14 @@ import { Calculator } from '../calculator';
 import { DeployCalculatorComponent } from '../deploy-calculator/deploy-calculator.component';
 import { RecycleCalculatorComponent } from '../recycle-calculator/recycle-calculator.component';
 import { Planet } from '../planet';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SHIPS } from '../ship';
 
 interface ICalculatorComponent {
   calculate(calculator: Calculator): void;
 }
 
-enum CalculatorType {
+export enum CalculatorType {
   Deploy,
   Recycle
 }
@@ -34,19 +35,50 @@ export class CalculatorComponent {
   public readonly CalculatorType = CalculatorType;
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute) {
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      let type = params['calculator'] == "recycle" ? CalculatorType.Recycle : CalculatorType.Deploy;
-      this.setCalculator(type);
+
+      const calculatorEnum = Object.keys(CalculatorType)
+        .find(key => key.toLowerCase() === params["calculator"].toLowerCase());
+      this.currentCalculator = CalculatorType[calculatorEnum];
+
+      this.calculate();
+
     });
+
+    this.route.queryParams.subscribe(params => {
+      var modelJson = params["model"];
+      if (modelJson) {
+        var model = JSON.parse(modelJson);
+        this.model = new Calculator(model);
+      }
+
+      var ships: string = (params["ships"] || "");
+      ships.split(",")
+        .forEach(s =>
+          SHIPS.filter(ship => ship.name == s)
+            .forEach(ship => ship.selected = true));
+
+      this.calculate();
+    })
   }
 
-  public setCalculator(type: CalculatorType): void {
-    this.currentCalculator = type;
-    this.calculate();
+  public update(): void {
+    var data = {
+      model: JSON.stringify(this.model),
+      ships: SHIPS.filter(s => s.selected).map(s => s.name).join(",")
+    }
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams: data,
+        queryParamsHandling: 'merge'
+      });
   }
 
   public calculate(): void {

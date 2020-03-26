@@ -1,9 +1,7 @@
 <div class="calculator container-fluid">
   <h2>Calculator</h2>
-  <app-calculator-controls
-    [model]="model"
-    [hidePlanet]="currentCalculator == CalculatorType.Recycle"
-    (change)='calculate()'></app-calculator-controls>
+  <app-calculator-controls [model]="model" [hidePlanet]="currentCalculator == CalculatorType.Recycle"
+    (change)='update()'></app-calculator-controls>
 
   <app-deploy-calculator [hidden]="currentCalculator != CalculatorType.Deploy"></app-deploy-calculator>
   <app-recycle-calculator [hidden]="currentCalculator != CalculatorType.Recycle"></app-recycle-calculator>
@@ -12,10 +10,10 @@
 <div role="navigation" class="footer">
   <ul class="nav nav-pills nav-fill">
     <li class="nav-item">
-      <a routerLink="/deploy" routerLinkActive="active" class="nav-link">Deploy</a>
+      <a routerLink="/deploy" routerLinkActive="active" queryParamsHandling="preserve" class="nav-link">Deploy</a>
     </li>
     <li class="nav-item">
-      <a routerLink="/recycle" routerLinkActive="active" class="nav-link">Recycle</a>
+      <a routerLink="/recycle" routerLinkActive="active" queryParamsHandling="preserve" class="nav-link">Recycle</a>
     </li>
   </ul>
 </div>
