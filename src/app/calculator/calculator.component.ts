@@ -74,7 +74,6 @@ export class CalculatorComponent implements OnInit {
     };
   }
 
-
   public update(): void {
     this.router.navigate(
       [],
@@ -95,5 +94,9 @@ export class CalculatorComponent implements OnInit {
         this.recycleCalculator.calculate(this.model);
         break;
     }
+  }
+
+  public isLinkActive(url: string): boolean {
+    return (('/' + this.route.snapshot.url.join('/')) === url);
   }
 }

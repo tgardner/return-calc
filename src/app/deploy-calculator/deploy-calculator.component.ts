@@ -58,7 +58,7 @@ export class DeployCalculatorComponent implements OnInit {
 
   private navigate() {
     var data = {
-      arrivalTime: this.arrivalTime.toISOString(),
+      arrivalTime: !this.arrivalTime ? "" : this.arrivalTime.toISOString(),
       started: this.started,
       recalled: this.recalled
     };
@@ -100,6 +100,7 @@ export class DeployCalculatorComponent implements OnInit {
     this.started = false;
     this.recalled = false;
     this.remaining = 0;
+    this.arrivalTime = null;
     this.navigate();
   }
 

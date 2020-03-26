@@ -10,12 +10,12 @@
 <div role="navigation" class="footer">
   <ul class="nav nav-pills nav-fill">
     <li class="nav-item">
-      <a routerLink="/deploy" routerLinkActive="active" [queryParams]="getState()" class="nav-link">
+      <a routerLink="/deploy" [class.active]="isLinkActive('/deploy')" [queryParams]="getState()" class="nav-link">
         Deploy
       </a>
     </li>
     <li class="nav-item">
-      <a routerLink="/recycle" routerLinkActive="active" [queryParams]="getState()" class="nav-link">
+      <a routerLink="/recycle" [class.active]="isLinkActive('/recycle')" [queryParams]="getState()" class="nav-link">
         Recycle
       </a>
     </li>
