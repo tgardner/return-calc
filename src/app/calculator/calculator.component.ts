@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { Calculator } from '../calculator';
 import { DeployCalculatorComponent } from '../deploy-calculator/deploy-calculator.component';
 import { RecycleCalculatorComponent } from '../recycle-calculator/recycle-calculator.component';
@@ -20,7 +20,7 @@ export enum CalculatorType {
   templateUrl: './calculator.component.html',
   styleUrls: ['./calculator.component.scss']
 })
-export class CalculatorComponent {
+export class CalculatorComponent implements OnInit {
   @ViewChild(DeployCalculatorComponent) deployCalculator: ICalculatorComponent;
   @ViewChild(RecycleCalculatorComponent) recycleCalculator: ICalculatorComponent;
 
@@ -67,17 +67,22 @@ export class CalculatorComponent {
     })
   }
 
-  public update(): void {
-    var data = {
+  public getState(): any {
+    return {
       model: JSON.stringify(this.model),
       ships: SHIPS.filter(s => s.selected).map(s => s.name).join(",")
-    }
+    };
+  }
+
+
+  public update(): void {
     this.router.navigate(
       [],
       {
         relativeTo: this.route,
-        queryParams: data,
-        queryParamsHandling: 'merge'
+        queryParams: this.getState(),
+        queryParamsHandling: 'merge',
+        replaceUrl: true
       });
   }
 

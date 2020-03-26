@@ -10,10 +10,14 @@
 <div role="navigation" class="footer">
   <ul class="nav nav-pills nav-fill">
     <li class="nav-item">
-      <a routerLink="/deploy" routerLinkActive="active" queryParamsHandling="preserve" class="nav-link">Deploy</a>
+      <a routerLink="/deploy" routerLinkActive="active" [queryParams]="getState()" class="nav-link">
+        Deploy
+      </a>
     </li>
     <li class="nav-item">
-      <a routerLink="/recycle" routerLinkActive="active" queryParamsHandling="preserve" class="nav-link">Recycle</a>
+      <a routerLink="/recycle" routerLinkActive="active" [queryParams]="getState()" class="nav-link">
+        Recycle
+      </a>
     </li>
   </ul>
 </div>

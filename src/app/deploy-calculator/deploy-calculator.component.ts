@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Calculator } from '../calculator';
 import { TimePipe } from '../time.pipe';
 import { interval } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
 
 const timeInterval = interval(50);
 
@@ -10,7 +11,7 @@ const timeInterval = interval(50);
   templateUrl: './deploy-calculator.component.html',
   styleUrls: ['./deploy-calculator.component.scss']
 })
-export class DeployCalculatorComponent {
+export class DeployCalculatorComponent implements OnInit {
   private timer: any;
   public started: boolean = false;
   public recalled: boolean = false;
@@ -19,7 +20,30 @@ export class DeployCalculatorComponent {
   public initial: string;
   public flightTime: number;
 
-  constructor(private timePipe: TimePipe) { }
+  constructor(
+    private timePipe: TimePipe,
+    private router: Router,
+    private route: ActivatedRoute) { }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params["arrivalTime"])
+        this.arrivalTime = new Date(params["arrivalTime"]);
+
+      this.started = params["started"] == "true";
+      this.recalled = params["recalled"] == "true";
+      if (this.timer) {
+        this.timer.unsubscribe();
+        this.timer = null;
+      }
+
+      if (this.started) {
+        this.timer = timeInterval.subscribe(() => {
+          this.tick();
+        });
+      }
+    });
+  }
 
   public calculate(calculator: Calculator): void {
     this.flightTime = calculator.calculateFlightTime();
@@ -32,9 +56,24 @@ export class DeployCalculatorComponent {
     this.initial = result;
   }
 
-  public start(): void {
-    if (this.timer) this.timer.unsubscribe();
+  private navigate() {
+    var data = {
+      arrivalTime: this.arrivalTime.toISOString(),
+      started: this.started,
+      recalled: this.recalled
+    };
 
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams: data,
+        queryParamsHandling: 'merge',
+        replaceUrl: true
+      });
+  }
+
+  public start(): void {
     var a = this.initial.split(':'); // split it at the colons
 
     // minutes are worth 60 seconds. Hours are worth 60 minutes.
@@ -43,11 +82,8 @@ export class DeployCalculatorComponent {
     var endTime = new Date();
     endTime.setTime(endTime.getTime() + seconds * 1000);
     this.arrivalTime = endTime;
-
-    this.timer = timeInterval.subscribe(() => {
-      this.tick();
-    });
     this.started = true;
+    this.navigate();
   }
 
   public recall(): void {
@@ -56,17 +92,15 @@ export class DeployCalculatorComponent {
     var endTime = new Date();
     endTime.setTime(endTime.getTime() + (this.flightTime - this.remaining) * 1000);
     this.arrivalTime = endTime;
+
+    this.navigate();
   }
 
   public stop(): void {
-    if (this.timer) {
-      this.timer.unsubscribe();
-      this.timer = null;
-    }
-
     this.started = false;
     this.recalled = false;
     this.remaining = 0;
+    this.navigate();
   }
 
   private tick(): void {
