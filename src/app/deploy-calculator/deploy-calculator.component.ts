@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { Calculator } from '../calculator';
 import { TimePipe } from '../time.pipe';
 import { interval } from 'rxjs';
@@ -21,9 +21,9 @@ export class DeployCalculatorComponent {
 
   constructor(private timePipe: TimePipe) { }
 
-  public calculate(calculator: Calculator) : void {
+  public calculate(calculator: Calculator): void {
     this.flightTime = calculator.calculateFlightTime();
-    if(isNaN(this.flightTime) || this.flightTime === Infinity) {
+    if (isNaN(this.flightTime) || this.flightTime === Infinity) {
       this.initial = null;
       return;
     }
@@ -33,7 +33,7 @@ export class DeployCalculatorComponent {
   }
 
   public start(): void {
-    if(this.timer) this.timer.unsubscribe();
+    if (this.timer) this.timer.unsubscribe();
 
     var a = this.initial.split(':'); // split it at the colons
 
@@ -59,7 +59,7 @@ export class DeployCalculatorComponent {
   }
 
   public stop(): void {
-    if(this.timer) {
+    if (this.timer) {
       this.timer.unsubscribe();
       this.timer = null;
     }
@@ -70,9 +70,9 @@ export class DeployCalculatorComponent {
   }
 
   private tick(): void {
-    var now:Date = new Date();
-    if(this.arrivalTime < now) {
-      if(!this.recalled) {
+    var now: Date = new Date();
+    if (this.arrivalTime < now) {
+      if (!this.recalled) {
         this.recall();
       } else {
         this.stop();

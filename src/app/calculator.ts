@@ -1,18 +1,29 @@
 import { SHIPS } from './ship';
 import { Planet } from './planet';
 
-export class Calculator {
-  constructor(
-    public start: Planet,
-    public end: Planet
-  ) { }
+export interface ICalculator {
+  start: Planet,
+  end: Planet,
+  speed: number;
+  modifier: number;
+  combustion: number;
+  impulse: number;
+  hyperspace: number;
+  admiral: number;
+}
 
+export class Calculator implements ICalculator {
+  constructor(init?:Partial<ICalculator>) {
+    Object.assign(this, init);
+  }
+
+  public start: Planet;
+  public end: Planet;
   public speed: number = 1;
   public modifier: number = 3;
   public combustion: number;
   public impulse: number;
   public hyperspace: number;
-  public ships = SHIPS;
   public admiral: number = 0;
 
   public calculateFlightTime(): number {
@@ -20,6 +31,8 @@ export class Calculator {
     var s = this.speed;
     var a = this.modifier;
     var v = this.calculateSpeed();
+    if(v === Infinity) return NaN;
+
     return Math.round((10 + (3500 / s) * Math.sqrt((10 * d) / v)) / a);
   }
 

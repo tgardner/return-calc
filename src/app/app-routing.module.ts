@@ -7,11 +7,11 @@ import { ProfitCalculatorComponent } from './profit-calculator/profit-calculator
 
 const routes: Routes = [
   { path: 'locations', component: LocationListComponent },
-  { path: 'calculator', component: CalculatorComponent },
   { path: 'profit', component: ProfitCalculatorComponent },
+  { path: ':calculator', component: CalculatorComponent },
   {
     path: '',
-    redirectTo: '/calculator',
+    redirectTo: '/deploy',
     pathMatch: 'full'
   },
   { path: '**', component: PageNotFoundComponent }

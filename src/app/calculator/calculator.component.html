@@ -2,18 +2,20 @@
   <h2>Calculator</h2>
   <app-calculator-controls
     [model]="model"
-    [hidePlanet]="currentCalculator == calculatorTypes.Recycle"
+    [hidePlanet]="currentCalculator == CalculatorType.Recycle"
     (change)='calculate()'></app-calculator-controls>
 
-  <app-deploy-calculator [hidden]="currentCalculator != calculatorTypes.Deploy"></app-deploy-calculator>
-  <app-recycle-calculator [hidden]="currentCalculator != calculatorTypes.Recycle"></app-recycle-calculator>
+  <app-deploy-calculator [hidden]="currentCalculator != CalculatorType.Deploy"></app-deploy-calculator>
+  <app-recycle-calculator [hidden]="currentCalculator != CalculatorType.Recycle"></app-recycle-calculator>
 </div>
 
 <div role="navigation" class="footer">
   <ul class="nav nav-pills nav-fill">
-    <li *ngFor="let calculator of calculators | keyvalue" class="nav-item">
-      <a href="javascript:void(0)" (click)='currentCalculator = calculator.key' class="nav-link"
-        [ngClass]="{'active': currentCalculator == calculator.key}">{{calculator.value}}</a>
+    <li class="nav-item">
+      <a routerLink="/deploy" routerLinkActive="active" class="nav-link">Deploy</a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="/recycle" routerLinkActive="active" class="nav-link">Recycle</a>
     </li>
   </ul>
 </div>

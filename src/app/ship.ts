@@ -34,8 +34,8 @@ export class Ship implements IShip {
   public static readonly Deathstar = "Deathstar";
   public static readonly Battlecruiser = "Battlecruiser";
 
-  public constructor(ship: IShip) {
-    Object.keys(ship).forEach((key) => this[key] = ship[key]);
+  public constructor(ship: Partial<IShip>) {
+    Object.assign(this, ship);
   }
 
   public readonly name: string;
@@ -158,7 +158,7 @@ export const SHIPS: Ship[] = [
     speed: new Map([
       [Drive.Combustion, 2000],
       [Drive.Impulse, 2000],
-      [Drive.Hyperspace, 2000],
+      [Drive.Hyperspace, 2000]
     ]),
     engine: Drive.Combustion,
     capacity: 20000,
@@ -181,7 +181,7 @@ export const SHIPS: Ship[] = [
     name: Ship.Bomber,
     speed: new Map([
       [Drive.Impulse, 4000],
-      [Drive.Hyperspace, 5000],
+      [Drive.Hyperspace, 5000]
     ]),
     engine: Drive.Impulse,
     capacity: 500,
@@ -192,7 +192,7 @@ export const SHIPS: Ship[] = [
   new Ship({
     name: Ship.Destroyer,
     speed: new Map([
-      [Drive.Hyperspace, 5000],
+      [Drive.Hyperspace, 5000]
     ]),
     engine: Drive.Hyperspace,
     capacity: 2000,
@@ -203,7 +203,7 @@ export const SHIPS: Ship[] = [
   new Ship({
     name: Ship.Deathstar,
     speed: new Map([
-      [Drive.Hyperspace, 100],
+      [Drive.Hyperspace, 100]
     ]),
     engine: Drive.Hyperspace,
     capacity: 1000000,
@@ -214,7 +214,7 @@ export const SHIPS: Ship[] = [
   new Ship({
     name: Ship.Battlecruiser,
     speed: new Map([
-      [Drive.Hyperspace, 10000],
+      [Drive.Hyperspace, 10000]
     ]),
     engine: Drive.Hyperspace,
     capacity: 750,

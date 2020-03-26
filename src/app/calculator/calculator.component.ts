@@ -3,6 +3,11 @@ import { Calculator } from '../calculator';
 import { DeployCalculatorComponent } from '../deploy-calculator/deploy-calculator.component';
 import { RecycleCalculatorComponent } from '../recycle-calculator/recycle-calculator.component';
 import { Planet } from '../planet';
+import { ActivatedRoute } from '@angular/router';
+
+interface ICalculatorComponent {
+  calculate(calculator: Calculator): void;
+}
 
 enum CalculatorType {
   Deploy,
@@ -15,31 +20,43 @@ enum CalculatorType {
   styleUrls: ['./calculator.component.scss']
 })
 export class CalculatorComponent {
-  @ViewChild(DeployCalculatorComponent) deployCalculator;
-  @ViewChild(RecycleCalculatorComponent) recycleCalculator;
+  @ViewChild(DeployCalculatorComponent) deployCalculator: ICalculatorComponent;
+  @ViewChild(RecycleCalculatorComponent) recycleCalculator: ICalculatorComponent;
 
-  public model: Calculator;
-  public calculators: Map<CalculatorType, string> = new Map<CalculatorType, string>([
-    [CalculatorType.Deploy, "Deploy"],
-    [CalculatorType.Recycle, "Recycle"]
-  ]);
-  public currentCalculator: CalculatorType;
-  public calculatorTypes = CalculatorType;
+  public model = new Calculator({
+    start: new Planet(1, 1, 1),
+    end: new Planet(1, 1, 2),
+    combustion: 18,
+    impulse: 15,
+    hyperspace: 14
+  });
+  public currentCalculator = CalculatorType.Deploy;
+  public readonly CalculatorType = CalculatorType;
 
-  constructor() {
-    var calculator = new Calculator(new Planet(1,1,1), new Planet(1,1,1));
+  constructor(
+    private route: ActivatedRoute) {
+  }
 
-    // Just populate the initial model with some values
-    calculator.combustion = 16;
-    calculator.impulse = 13;
-    calculator.hyperspace = 12;
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      let type = params['calculator'] == "recycle" ? CalculatorType.Recycle : CalculatorType.Deploy;
+      this.setCalculator(type);
+    });
+  }
 
-    this.model = calculator;
-    this.currentCalculator = CalculatorType.Deploy;
+  public setCalculator(type: CalculatorType): void {
+    this.currentCalculator = type;
+    this.calculate();
   }
 
   public calculate(): void {
-    this.deployCalculator.calculate(this.model);
-    this.recycleCalculator.calculate(this.model);
+    switch (this.currentCalculator) {
+      case CalculatorType.Deploy:
+        this.deployCalculator.calculate(this.model);
+        break;
+      case CalculatorType.Recycle:
+        this.recycleCalculator.calculate(this.model);
+        break;
+    }
   }
 }

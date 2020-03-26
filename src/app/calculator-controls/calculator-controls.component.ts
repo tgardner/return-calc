@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Calculator } from '../calculator';
 import { SHIPS } from '../ship';
 
@@ -7,23 +7,20 @@ import { SHIPS } from '../ship';
   templateUrl: './calculator-controls.component.html',
   styleUrls: ['./calculator-controls.component.scss']
 })
-export class CalculatorControlsComponent implements OnInit {
+export class CalculatorControlsComponent {
   @Input() model: Calculator;
   @Input() hidePlanet: boolean = false;
 
   @Output() change: EventEmitter<Calculator> = new EventEmitter<Calculator>();
 
-  public modifiers: number[] = [1,2,3,4,5];
+  public readonly modifiers: number[] = [1,2,3,4,5];
 
-  public speeds: number[] = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1];
-  public admiralBonuses: number[] = [0,.1,.2];
+  public readonly speeds: number[] = [.1,.2,.3,.4,.5,.6,.7,.8,.9,1];
+  public readonly admiralBonuses: number[] = [0,.1,.2];
 
-  public ships = SHIPS;
+  public readonly ships = SHIPS;
 
   constructor() {
-  }
-
-  ngOnInit() {
   }
 
   public onChange(): void {
