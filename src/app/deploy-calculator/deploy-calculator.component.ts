@@ -107,11 +107,7 @@ export class DeployCalculatorComponent implements OnInit {
   private tick(): void {
     var now: Date = new Date();
     if (this.arrivalTime < now) {
-      if (!this.recalled) {
-        this.recall();
-      } else {
-        this.stop();
-      }
+      this.stop();
       return;
     }
 
