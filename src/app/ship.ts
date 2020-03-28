@@ -157,8 +157,8 @@ export const SHIPS: Ship[] = [
     name: Ship.Recycler,
     speed: new Map([
       [Drive.Combustion, 2000],
-      [Drive.Impulse, 2000],
-      [Drive.Hyperspace, 2000]
+      [Drive.Impulse, 4000],
+      [Drive.Hyperspace, 6000]
     ]),
     engine: Drive.Combustion,
     capacity: 20000,
