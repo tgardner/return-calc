@@ -1,18 +1,9 @@
 import { Component } from '@angular/core';
 import { Calculator } from '../calculator';
-import { interval } from 'rxjs';
-import { Planet } from '../planet';
+import { interval, Subscription } from 'rxjs';
+import { Flight } from '../flight';
 
-const timeInterval = interval(50);
-
-class SlotValue {
-  constructor(public planet: number, public flightTime: number) {
-    this.remaining = flightTime;
-  }
-
-  public remaining: number;
-  public endTime: Date;
-}
+const timeInterval = interval(100);
 
 @Component({
   selector: 'app-recycle-calculator',
@@ -20,53 +11,51 @@ class SlotValue {
   styleUrls: ['./recycle-calculator.component.scss']
 })
 export class RecycleCalculatorComponent {
-
-  // planet number, flight time
-  public planets: SlotValue[] = [];
+  public flights: Flight[];
   public show: boolean = false;
   public started: boolean = false;
-  public selected: SlotValue;
+  public selected?: number = null;
   private calculator: Calculator;
-  private timer: any;
+  private timer : Subscription;
 
   constructor() {
   }
 
   public calculate(calculator: Calculator): void {
     this.calculator = calculator.clone();
+
     this.reset();
+
+    var flightTime = this.calculator.calculateFlightTime();
+
+    if (isNaN(flightTime) || flightTime === Infinity) {
+      this.show = false;
+      return;
+    }
+
+    this.show = true;
+    this.flights = [];
+    for (var i = 1; i <= 15; ++i) {
+      this.calculator.end.planet = i;
+      var flight = new Flight(this.calculator.calculateFlightTime());
+      this.flights.push(flight);
+    }
   }
 
   private reset(): void {
-    if(this.timer) {
+    if (this.timer) {
       this.timer.unsubscribe();
       this.timer = null;
     }
     this.started = false;
     this.selected = null;
-    var flightTime = this.calculator.calculateFlightTime();
-
-    if(isNaN(flightTime) || flightTime === Infinity) {
-      this.show = false;
-      return;
-    }
-    this.show = true;
-
-    this.planets = [];
-    for(var i = 0; i < 15; ++i) {
-      this.calculator.end.planet = i + 1;
-      this.planets.push(new SlotValue(i + 1, this.calculator.calculateFlightTime()));
-    }
   }
 
   public start(): void {
     this.started = true;
 
-    for(var i = 0; i < 15; ++i) {
-      var planet = this.planets[i];
-      planet.endTime = new Date();
-      planet.endTime.setTime(planet.endTime.getTime() + planet.remaining * 1000);
-    }
+    this.flights.forEach(f => f.start());
+
     this.timer = timeInterval.subscribe(() => {
       this.tick();
     });
@@ -74,21 +63,12 @@ export class RecycleCalculatorComponent {
 
   public stop(): void {
     this.reset();
+    this.flights.forEach(f => f.endTime = null);
   }
 
   private tick(): void {
-    var now = new Date();
-    var stop = true;
-    for(var i = 0; i < 15; ++i) {
-      var planet = this.planets[i];
-      if(planet.endTime < now) {
-        planet.remaining = 0;
-        continue;
-      }
-      stop = false;
-      planet.remaining = (+planet.endTime - +now) / 1000;
-    }
-    if(stop) {
+    var remaining = this.flights.filter(f => f.remaining > 0);
+    if (remaining.length === 0) {
       this.stop();
     }
   }

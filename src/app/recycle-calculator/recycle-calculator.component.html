@@ -3,22 +3,22 @@
     <button type="button"
       name="button"
       (click)="start()"
-      [hidden]="started"
+      *ngIf="!started"
       class="btn btn-primary btn-lg">Start</button>
 
     <button type="button"
       name="button"
       (click)="stop()"
-      [hidden]="!started"
+      *ngIf="started"
       class="btn btn-lg btn-danger">Stop</button>
   </p>
-  <div [hidden]="!selected || !started">
-      <h2 [hidden]="!started" class="text-center">
-        Slot {{selected?.planet}} -
-        <span [hidden]="selected?.remaining > 0">Arrived</span>
-        <span [hidden]="selected?.remaining == 0">{{selected?.remaining | time}}</span>
+  <div *ngIf="started && selected !== null">
+      <h2 class="text-center">
+        Slot {{selected + 1}} -
+        <span *ngIf="flights[selected].remaining <= 0">Arrived</span>
+        <span *ngIf="flights[selected].remaining > 0">{{flights[selected].remaining | time}}</span>
       </h2>
-      <h3 [hidden]="!started">Arrival: {{selected?.endTime}}</h3>
+      <h3>Arrival: {{flights[selected].endTime}}</h3>
   </div>
   <div class="table-responsive">
     <table class="table table-hover">
@@ -28,14 +28,14 @@
           <th>Arrival</th>
           <th style="width: 50%;">End Time</th>
         </tr>
-        <tr *ngFor="let planet of planets" (click)="selected = planet"
-          [ngClass]="{'active': selected?.planet == planet.planet}">
-          <td scope="row">{{planet.planet}}</td>
+        <tr *ngFor="let flight of flights; let i = index" (click)="selected = i"
+          [ngClass]="{'active': selected === i}">
+          <td scope="row">{{i + 1}}</td>
           <td>
-            <span [hidden]="planet.remaining > 0">Arrived</span>
-            <span [hidden]="planet.remaining == 0">{{planet.remaining | time}}</span>
+            <span *ngIf="flight.remaining <= 0">Arrived</span>
+            <span *ngIf="flight.remaining > 0">{{flight.remaining | time}}</span>
           </td>
-          <td>{{planet.endTime}}</td>
+          <td>{{flight.endTime}}</td>
         </tr>
       </thead>
     </table>
