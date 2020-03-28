@@ -21,8 +21,8 @@ export enum CalculatorType {
   styleUrls: ['./calculator.component.scss']
 })
 export class CalculatorComponent implements OnInit {
-  @ViewChild(DeployCalculatorComponent) deployCalculator: ICalculatorComponent;
-  @ViewChild(RecycleCalculatorComponent) recycleCalculator: ICalculatorComponent;
+  @ViewChild(DeployCalculatorComponent, { static: true }) deployCalculator: ICalculatorComponent;
+  @ViewChild(RecycleCalculatorComponent, { static: true }) recycleCalculator: ICalculatorComponent;
 
   public model = new Calculator({
     start: new Planet(1, 1, 1),
