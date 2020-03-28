@@ -1,34 +1,20 @@
 <div>
   <div>
     <label for="initial_time">Initial Time:</label>
-    <input type="text"
-      id="initial_time"
-      pattern="[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}"
-      [(ngModel)]="initial"
+    <input type="text" id="initial_time" pattern="[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}" [(ngModel)]="initial"
       class="input-lg form-control" />
   </div>
   <p>&nbsp;</p>
 
-  <div [hidden]="!initial">
-    <button type="button"
-      name="button"
-      (click)="start()"
-      [hidden]="started"
-      class="btn btn-primary btn-lg">Start</button>
+  <div *ngIf="!!initial">
+    <button type="button" name="button" (click)="start()" *ngIf="!started" class="btn btn-primary btn-lg">Start</button>
 
-    <button type="button"
-      name="button"
-      (click)="stop()"
-      [hidden]="!started"
-      class="btn btn-lg btn-danger">Stop</button>
+    <button type="button" name="button" (click)="stop()" *ngIf="started" class="btn btn-lg btn-danger">Stop</button>
 
-    <button type="button"
-      name="button"
-      (click)="recall()"
-      [hidden]="!started"
+    <button type="button" name="button" (click)="recall()" *ngIf="started"
       class="btn btn-lg btn-secondary float-right">Recall</button>
   </div>
 
-  <h2 [hidden]="!started" class="text-center">{{remaining | time}}</h2>
-  <h3 [hidden]="!started">Arrival: {{arrivalTime}}</h3>
+  <h2 *ngIf="started" class="text-center">{{flight.remaining | time}}</h2>
+  <h3 *ngIf="started">Arrival: {{flight.endTime}}</h3>
 </div>
