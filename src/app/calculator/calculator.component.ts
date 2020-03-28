@@ -2,6 +2,7 @@ import { Component, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Calculator } from '../calculator';
 import { Planet } from '../planet';
 import { ActivatedRoute, Router } from '@angular/router';
+import { combineLatest } from 'rxjs';
 
 interface ICalculatorComponent {
   calculate(calculator: Calculator): void;
@@ -38,41 +39,37 @@ export class CalculatorComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
+    combineLatest([this.route.params, this.route.queryParams]).subscribe(results => {
+      var queryParams = results[1];
+      var params = results[0];
 
       const calculatorEnum = Object.keys(CalculatorType)
         .find(key => key.toLowerCase() === params["calculator"].toLowerCase());
       this.currentCalculator = CalculatorType[calculatorEnum];
-      this.changeDetector.detectChanges()
-      this.calculate();
+      this.changeDetector.detectChanges();
 
-    });
-
-    this.route.queryParams.subscribe(params => {
-      if(Object.keys(params).length === 0) {
+      if (Object.keys(queryParams).length === 0) {
         this.navigate();
         return;
       }
 
-      var model = this.model;
-      for (var i in params) {
+      for (var i in queryParams) {
         switch (i) {
           case "start":
           case "end":
-            model[i] = new Planet(params[i]);
+            this.model[i] = new Planet(queryParams[i]);
             break;
           case "ships":
-            model.ships
-              .filter(ship => params[i].indexOf(ship.name) >= 0)
+            this.model.ships
+              .filter(ship => queryParams[i].indexOf(ship.name) >= 0)
               .forEach(s => s.selected = true);
             break;
           default:
-            if (model.hasOwnProperty(i))
-              model[i] = parseFloat(params[i]);
+            if (this.model.hasOwnProperty(i))
+              this.model[i] = parseFloat(queryParams[i]);
             break;
         }
       }
-      this.model = model;
       this.calculate();
     });
   }
