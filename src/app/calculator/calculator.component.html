@@ -3,8 +3,8 @@
   <app-calculator-controls [model]="model" [hidePlanet]="currentCalculator == CalculatorType.Recycle"
     (change)='update()'></app-calculator-controls>
 
-  <app-deploy-calculator [hidden]="currentCalculator != CalculatorType.Deploy"></app-deploy-calculator>
-  <app-recycle-calculator [hidden]="currentCalculator != CalculatorType.Recycle"></app-recycle-calculator>
+  <app-deploy-calculator #calculator *ngIf="currentCalculator == CalculatorType.Deploy"></app-deploy-calculator>
+  <app-recycle-calculator #calculator *ngIf="currentCalculator == CalculatorType.Recycle"></app-recycle-calculator>
 </div>
 
 <div role="navigation" class="footer">

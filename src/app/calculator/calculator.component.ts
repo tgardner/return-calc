@@ -1,7 +1,5 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Calculator } from '../calculator';
-import { DeployCalculatorComponent } from '../deploy-calculator/deploy-calculator.component';
-import { RecycleCalculatorComponent } from '../recycle-calculator/recycle-calculator.component';
 import { Planet } from '../planet';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SHIPS } from '../ship';
@@ -21,8 +19,8 @@ export enum CalculatorType {
   styleUrls: ['./calculator.component.scss']
 })
 export class CalculatorComponent implements OnInit {
-  @ViewChild(DeployCalculatorComponent, { static: true }) deployCalculator: ICalculatorComponent;
-  @ViewChild(RecycleCalculatorComponent, { static: true }) recycleCalculator: ICalculatorComponent;
+  @ViewChild("calculator")
+  calculator: ICalculatorComponent;
 
   public model = new Calculator({
     start: new Planet(1, 1, 1),
@@ -36,7 +34,8 @@ export class CalculatorComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private changeDetector : ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -45,7 +44,7 @@ export class CalculatorComponent implements OnInit {
       const calculatorEnum = Object.keys(CalculatorType)
         .find(key => key.toLowerCase() === params["calculator"].toLowerCase());
       this.currentCalculator = CalculatorType[calculatorEnum];
-
+      this.changeDetector.detectChanges()
       this.calculate();
 
     });
@@ -55,6 +54,9 @@ export class CalculatorComponent implements OnInit {
       if (modelJson) {
         var model = JSON.parse(modelJson);
         this.model = new Calculator(model);
+      } else {
+        this.update();
+        return;
       }
 
       var ships: string = (params["ships"] || "");
@@ -86,14 +88,7 @@ export class CalculatorComponent implements OnInit {
   }
 
   public calculate(): void {
-    switch (this.currentCalculator) {
-      case CalculatorType.Deploy:
-        this.deployCalculator.calculate(this.model);
-        break;
-      case CalculatorType.Recycle:
-        this.recycleCalculator.calculate(this.model);
-        break;
-    }
+    this.calculator.calculate(this.model);
   }
 
   public isLinkActive(url: string): boolean {
