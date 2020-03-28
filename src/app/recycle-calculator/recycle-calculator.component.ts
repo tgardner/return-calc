@@ -32,8 +32,7 @@ export class RecycleCalculatorComponent {
   }
 
   public calculate(calculator: Calculator): void {
-    var copy: Calculator = JSON.parse(JSON.stringify(calculator)) as Calculator;
-    Object.setPrototypeOf(copy, Calculator.prototype);
+    var copy = new Calculator(calculator);
     this.calculator = copy;
     this.reset();
   }

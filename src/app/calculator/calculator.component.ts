@@ -2,7 +2,6 @@ import { Component, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Calculator } from '../calculator';
 import { Planet } from '../planet';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SHIPS } from '../ship';
 
 interface ICalculatorComponent {
   calculate(calculator: Calculator): void;
@@ -35,7 +34,7 @@ export class CalculatorComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private changeDetector : ChangeDetectorRef) {
+    private changeDetector: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -50,29 +49,45 @@ export class CalculatorComponent implements OnInit {
     });
 
     this.route.queryParams.subscribe(params => {
-      var modelJson = params["model"];
-      if (modelJson) {
-        var model = JSON.parse(modelJson);
-        this.model = new Calculator(model);
-      } else {
+      if(Object.keys(params).length === 0) {
         this.update();
         return;
       }
 
-      var ships: string = (params["ships"] || "");
-      ships.split(",")
-        .forEach(s =>
-          SHIPS.filter(ship => ship.name == s)
-            .forEach(ship => ship.selected = true));
-
+      var model = this.model;
+      for (var i in params) {
+        switch (i) {
+          case "start":
+          case "end":
+            model[i] = Planet.create(params[i]);
+            break;
+          case "ships":
+            model.ships
+              .filter(ship => params[i].indexOf(ship.name) >= 0)
+              .forEach(s => s.selected = true);
+            break;
+          default:
+            if (model.hasOwnProperty(i))
+              model[i] = parseFloat(params[i]);
+            break;
+        }
+      }
+      this.model = model;
       this.calculate();
-    })
+    });
   }
 
-  public getState(): any {
+  public getState() {
     return {
-      model: JSON.stringify(this.model),
-      ships: SHIPS.filter(s => s.selected).map(s => s.name).join(",")
+      start: this.model.start.toString(),
+      end: this.model.end.toString(),
+      speed: this.model.speed,
+      modifier: this.model.modifier,
+      combustion: this.model.combustion,
+      impulse: this.model.impulse,
+      hyperspace: this.model.hyperspace,
+      admiral: this.model.admiral,
+      ships: this.model.ships.filter(s => s.selected).map(s => s.name)
     };
   }
 

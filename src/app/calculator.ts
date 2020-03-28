@@ -13,7 +13,7 @@ export interface ICalculator {
 }
 
 export class Calculator implements ICalculator {
-  constructor(readonly init?:Partial<ICalculator>) {
+  constructor(private readonly init?:Partial<ICalculator>) {
     Object.assign(this, init);
   }
 
@@ -25,6 +25,7 @@ export class Calculator implements ICalculator {
   public impulse: number;
   public hyperspace: number;
   public admiral: number = 0;
+  public ships = SHIPS;
 
   public calculateFlightTime(): number {
     var d = this.calculateDistance();

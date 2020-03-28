@@ -9,6 +9,12 @@ export class Planet {
     return this.galaxy.toString() + ":" + this.system.toString() + ":" + this.planet.toString();
   }
 
+  public static create(data: string) : Planet {
+    var match = data.match(/^(\d+):(\d+):(\d+)/);
+    if(!match) return null;
+    return new Planet(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]));
+  }
+
   public static sort(a: Planet, b: Planet) : number {
     if(a.galaxy !== b.galaxy)
       return a.galaxy < b.galaxy ? -1 : 1;

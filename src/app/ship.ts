@@ -1,8 +1,4 @@
-export interface IShipCost {
-  metal: number;
-  crystal: number;
-  deuterium: number;
-}
+import { ICost } from './icost';
 
 enum Drive {
   Combustion = 1,
@@ -10,7 +6,7 @@ enum Drive {
   Hyperspace = 3
 }
 
-interface IShip extends IShipCost {
+interface IShip extends ICost {
   name: string;
   engines: EngineCollection;
   capacity: number;
@@ -130,7 +126,7 @@ export const SHIPS: Ship[] = [
   new Ship({
     name: Ship.LightFighter,
     engines: new EngineCollection(Drive.Combustion, [
-      { drive: Drive.Combustion,  speed: 12500, fuel: 20 }
+      { drive: Drive.Combustion, speed: 12500, fuel: 20 }
     ]),
     capacity: 50,
     metal: 3000,

@@ -59,7 +59,7 @@
 </div>
 <div>
   <label>Ships</label>
-  <div class="form-check" *ngFor="let ship of ships">
+  <div class="form-check" *ngFor="let ship of model.ships">
     <label class="form-check-label">
       <input type="checkbox" [(ngModel)]="ship.selected" (change)="onChange()" />
       {{ship.name}}

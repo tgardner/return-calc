@@ -1,4 +1,5 @@
-import { SHIPS, IShipCost } from '../ship';
+import { SHIPS } from '../ship';
+import { ICost } from '../icost';
 
 const allowedShips: string[] = SHIPS.map(s => s.name);
 
@@ -7,19 +8,10 @@ interface IMap<T> {
   [index: number]: T;
 }
 
-class ShipCost implements IShipCost {
-  public constructor(
-    public metal: number = 0,
-    public crystal: number = 0,
-    public deuterium: number = 0) {
-
-  }
-}
-
 class Player {
   public initial: IMap<number> = {};
   public final: IMap<number> = {};
-  public get losses(): IShipCost {
+  public get losses(): ICost {
     return this.calculateLosses();
   }
 
@@ -41,8 +33,8 @@ class Player {
     }
   }
 
-  private calculateLosses(): IShipCost {
-    var losses: IShipCost = new ShipCost();
+  private calculateLosses(): ICost {
+    var losses : ICost = { metal: 0, crystal: 0, deuterium: 0 };
 
     const reducer = (acc, c) => {
       var lost = this.initial[c.name] - (this.final[c.name] || 0);
@@ -68,16 +60,16 @@ enum Winner {
 export class BattleReport {
   public attackers: IMap<Player> = {};
   public defenders: IMap<Player> = {};
-  public debris: IShipCost = { metal: 0, crystal: 0, deuterium: 0 };
-  public resources: IShipCost = { metal: 0, crystal: 0, deuterium: 0 };
-  public get profit(): IShipCost {
+  public debris: ICost = { metal: 0, crystal: 0, deuterium: 0 };
+  public resources: ICost = { metal: 0, crystal: 0, deuterium: 0 };
+  public get profit(): ICost {
     return {
       metal: this.resources.metal + this.debris.metal - this.losses.metal,
       crystal: this.resources.crystal + this.debris.crystal - this.losses.crystal,
       deuterium: this.resources.deuterium + this.debris.deuterium - this.losses.deuterium
     };
   };
-  public get dividend(): IShipCost {
+  public get dividend(): ICost {
     var playerCollection: IMap<Player> = this.winningPlayers;
     var players = Object.keys(playerCollection).length;
 
@@ -90,13 +82,13 @@ export class BattleReport {
   public get winningPlayers(): IMap<Player> {
     return (this.winner === Winner.Attacker) ? this.attackers : this.defenders;
   }
-  public get losses(): IShipCost {
+  public get losses(): ICost {
     return this.calculateLosses();
   }
   public winner: Winner = Winner.Defender;
 
-  private calculateLosses(): IShipCost {
-    var losses: IShipCost = new ShipCost();
+  private calculateLosses(): ICost {
+    var losses : ICost = { metal: 0, crystal: 0, deuterium: 0 };
 
     var playerCollection: IMap<Player> = this.winningPlayers;
     const reducer = (acc, c) => {
