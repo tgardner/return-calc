@@ -1,7 +1,7 @@
 <div class="calculator container-fluid">
   <h2>Calculator</h2>
   <app-calculator-controls [model]="model" [hidePlanet]="currentCalculator == CalculatorType.Recycle"
-    (change)='update()'></app-calculator-controls>
+    (change)='navigate()'></app-calculator-controls>
 
   <app-deploy-calculator #calculator *ngIf="currentCalculator == CalculatorType.Deploy"></app-deploy-calculator>
   <app-recycle-calculator #calculator *ngIf="currentCalculator == CalculatorType.Recycle"></app-recycle-calculator>

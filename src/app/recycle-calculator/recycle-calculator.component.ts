@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Calculator } from '../calculator';
 import { interval } from 'rxjs';
+import { Planet } from '../planet';
 
 const timeInterval = interval(50);
 
@@ -32,8 +33,7 @@ export class RecycleCalculatorComponent {
   }
 
   public calculate(calculator: Calculator): void {
-    var copy = new Calculator(calculator);
-    this.calculator = copy;
+    this.calculator = calculator.clone();
     this.reset();
   }
 

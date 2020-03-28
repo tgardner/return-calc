@@ -50,7 +50,7 @@ export class CalculatorComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
       if(Object.keys(params).length === 0) {
-        this.update();
+        this.navigate();
         return;
       }
 
@@ -91,7 +91,7 @@ export class CalculatorComponent implements OnInit {
     };
   }
 
-  public update(): void {
+  public navigate(): void {
     this.router.navigate(
       [],
       {

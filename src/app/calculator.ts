@@ -27,6 +27,13 @@ export class Calculator implements ICalculator {
   public admiral: number = 0;
   public ships = SHIPS;
 
+  public clone(): Calculator {
+    var copy = new Calculator(this);
+    copy.start = Planet.create(this.start.toString());
+    copy.end = Planet.create(this.end.toString());
+    return copy;
+  }
+
   public calculateFlightTime(): number {
     var d = this.calculateDistance();
     var s = this.speed;
