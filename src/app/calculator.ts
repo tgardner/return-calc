@@ -13,7 +13,7 @@ export interface ICalculator {
 }
 
 export class Calculator implements ICalculator {
-  constructor(init?:Partial<ICalculator>) {
+  constructor(readonly init?:Partial<ICalculator>) {
     Object.assign(this, init);
   }
 

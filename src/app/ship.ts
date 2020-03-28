@@ -1,34 +1,28 @@
-export enum Drive {
-  Combustion = 1,
-  Impulse = 2,
-  Hyperspace = 3
-}
-
 export interface IShipCost {
   metal: number;
   crystal: number;
   deuterium: number;
 }
 
-export interface IShip extends IShipCost {
+enum Drive {
+  Combustion = 1,
+  Impulse = 2,
+  Hyperspace = 3
+}
+
+interface IShip extends IShipCost {
   name: string;
   engines: EngineCollection;
   capacity: number;
 }
 
-const bonusMap = new Map<Drive, number>([
-  [Drive.Combustion, .1],
-  [Drive.Impulse, .2],
-  [Drive.Hyperspace, .3]
-]);
-
-export interface IEngine {
+interface IEngine {
   drive: Drive,
   speed: number,
   fuel: number
 }
 
-export class EngineCollection {
+class EngineCollection {
   private readonly map: Map<Drive, IEngine>;
 
   public constructor(
@@ -46,7 +40,13 @@ export class EngineCollection {
   }
 }
 
-export class Ship implements IShip {
+const bonusMap = new Map<Drive, number>([
+  [Drive.Combustion, .1],
+  [Drive.Impulse, .2],
+  [Drive.Hyperspace, .3]
+]);
+
+class Ship implements IShip {
   public static readonly SmallCargo = "Small Cargo";
   public static readonly LargeCargo = "Large Cargo";
   public static readonly LightFighter = "Light Fighter";
