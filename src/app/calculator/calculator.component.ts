@@ -59,7 +59,7 @@ export class CalculatorComponent implements OnInit {
         switch (i) {
           case "start":
           case "end":
-            model[i] = Planet.create(params[i]);
+            model[i] = new Planet(params[i]);
             break;
           case "ships":
             model.ships

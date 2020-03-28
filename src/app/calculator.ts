@@ -13,7 +13,7 @@ export interface ICalculator {
 }
 
 export class Calculator implements ICalculator {
-  constructor(private readonly init?:Partial<ICalculator>) {
+  constructor(readonly init?:Partial<ICalculator>) {
     Object.assign(this, init);
   }
 
@@ -29,8 +29,8 @@ export class Calculator implements ICalculator {
 
   public clone(): Calculator {
     var copy = new Calculator(this);
-    copy.start = Planet.create(this.start.toString());
-    copy.end = Planet.create(this.end.toString());
+    copy.start = new Planet(this.start);
+    copy.end = new Planet(this.end);
     return copy;
   }
 
