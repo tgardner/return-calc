@@ -18,18 +18,11 @@ class Player {
   public constructor(public name: string) {
   }
 
-  public loadShips(ships: string[], initial: boolean = true): void {
+  public loadShips(ships:IMap<number>, initial: boolean = true): void {
     var map: IMap<number> = initial ? this.initial : this.final;
-
-    for (var i = 0; i < ships.length; ++i) {
-      var shipString = ships[i];
-      var matches = shipString.match("^(.*)\t(.+)$");
-      if (!matches) continue;
-
-      var ship = matches[1];
-      var amount = parseInt(matches[2].replace(",", ""));
-      if (allowedShips.indexOf(ship) < 0) continue;
-      map[ship] = (map[ship] || 0) + amount;
+    for(var i in ships) {
+      if(allowedShips.indexOf(i) < 0) continue;
+      map[i] = (map[i] || 0) + ships[i];
     }
   }
 
@@ -160,13 +153,13 @@ export class BattleReportParser {
       }
 
       var player = collection[name];
-      var ships = [];
+      var ships : IMap<number> = {};
 
       unparsed = unparsed.replace(nameRegex, "");
       var shipMatch = unparsed.match(shipRegex);
 
       while (shipMatch != null) {
-        ships.push(shipMatch[1] + "\t" + this.santizeNumber(shipMatch[2]));
+        ships[shipMatch[1]] = this.santizeNumber(shipMatch[2]);
         unparsed = unparsed.replace(shipRegex, "");
         shipMatch = unparsed.match(shipRegex);
       }
