@@ -34,7 +34,7 @@ class Player {
   }
 
   private calculateLosses(): ICost {
-    var losses : ICost = { metal: 0, crystal: 0, deuterium: 0 };
+    var losses: ICost = { metal: 0, crystal: 0, deuterium: 0 };
 
     const reducer = (acc, c) => {
       var lost = this.initial[c.name] - (this.final[c.name] || 0);
@@ -88,7 +88,7 @@ export class BattleReport {
   public winner: Winner = Winner.Defender;
 
   private calculateLosses(): ICost {
-    var losses : ICost = { metal: 0, crystal: 0, deuterium: 0 };
+    var losses: ICost = { metal: 0, crystal: 0, deuterium: 0 };
 
     var playerCollection: IMap<Player> = this.winningPlayers;
     const reducer = (acc, c) => {
@@ -138,24 +138,24 @@ export class BattleReportParser {
     // Load Initial
     var attackers = reportDoc.querySelectorAll('table td:first-child');
     var defenders = reportDoc.querySelectorAll('table td:last-child');
-    this.parsePlayers(result.attackers, attackers[0].textContent, true);
-    this.parsePlayers(result.defenders, defenders[0].textContent, true);
+    this.parsePlayers(result.attackers, attackers[0].innerHTML, true);
+    this.parsePlayers(result.defenders, defenders[0].innerHTML, true);
 
     // Load Final
-    this.parsePlayers(result.attackers, attackers[1].textContent, false);
-    this.parsePlayers(result.defenders, defenders[1].textContent, false);
+    this.parsePlayers(result.attackers, attackers[1].innerHTML, false);
+    this.parsePlayers(result.defenders, defenders[1].innerHTML, false);
 
     return result;
   }
 
   private parsePlayers(collection: IMap<Player>, input: string, initial: boolean = false): void {
     var unparsed = input;
-    var nameRegex = /\s?(Destroyed)?([A-Za-z0-9_-]+)(\s\[\d:\d{1,3}:\d{1,3}\s\([MP]\)\])?(?=WSA)/i;
-    var shipRegex = new RegExp("^(" + SHIPS.map(s => s.name).join("|") + ")([0-9,]+)", "i");
+    var nameRegex = /^<p><strong>([a-z0-9_-]+)(\s\[\d:\d{1,3}:\d{1,3}\s\([MP]\)\])?<\/strong><br><strong>WSA:[0-9+%/]+<\/strong>Ships<\/p>/i;
+    var shipRegex = /^<p>([^>]+)<\/p><p>([0-9,]+)<\/p>(<p>Defense<\/p>)?/i
 
     var match = unparsed.match(nameRegex);
     while (match != null) {
-      var name = match[2];
+      var name = match[1];
       if (!collection[name]) {
         collection[name] = new Player(name);
       }
@@ -163,7 +163,7 @@ export class BattleReportParser {
       var player = collection[name];
       var ships = [];
 
-      unparsed = unparsed.replace(nameRegex, "").replace(/WSA:[0-9+%/]+Ships/i, "");
+      unparsed = unparsed.replace(nameRegex, "");
       var shipMatch = unparsed.match(shipRegex);
 
       while (shipMatch != null) {
