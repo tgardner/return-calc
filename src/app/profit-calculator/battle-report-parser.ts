@@ -150,12 +150,11 @@ export class BattleReportParser {
 
   private parsePlayers(collection: IMap<Player>, input: string, initial: boolean = false): void {
     var unparsed = input;
-    var nameRegex = /^<p><strong>([a-z0-9_-]+)(\s\[\d:\d{1,3}:\d{1,3}\s\([MP]\)\])?<\/strong><br><strong>WSA:[0-9+%/]+<\/strong>Ships<\/p>/i;
+    var nameRegex = /^(<p>)?<strong>([a-z0-9_-]+)(\s\[\d:\d{1,3}:\d{1,3}\s\([MP]\)\])?<\/strong><br><strong>WSA:[0-9+%/]+<\/strong>(Ships|Defense|Destroyed)(<\/p>)?/i;
     var shipRegex = /^<p>([^>]+)<\/p><p>([0-9,]+)<\/p>(<p>Defense<\/p>)?/i
-
     var match = unparsed.match(nameRegex);
     while (match != null) {
-      var name = match[1];
+      var name = match[2];
       if (!collection[name]) {
         collection[name] = new Player(name);
       }
