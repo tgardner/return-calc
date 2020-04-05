@@ -25,7 +25,7 @@
       </button>
     </div>
   </div>
-  <div *ngIf="battleReport !== undefined" class="top-buffer">
+  <div *ngIf="!!battleReport" class="top-buffer">
     <h3>Winner: {{battleReport.winner == 0 ? "Attacker" : "Defender"}}</h3>
     <h3>Losses</h3>
     <h4>Attackers</h4>
