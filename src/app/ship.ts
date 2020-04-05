@@ -6,7 +6,7 @@ enum Drive {
   Hyperspace = 3
 }
 
-interface IShip extends ICost {
+export interface IShip extends ICost {
   name: string;
   engines: EngineCollection;
   capacity: number;

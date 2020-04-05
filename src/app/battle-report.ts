@@ -1,4 +1,4 @@
-import { SHIPS } from './ship';
+import { SHIPS, IShip } from './ship';
 import { ICost } from './icost';
 
 const allowedShips: string[] = SHIPS.map(s => s.name);
@@ -29,7 +29,7 @@ class Player {
     private calculateLosses(): ICost {
         var losses: ICost = { metal: 0, crystal: 0, deuterium: 0 };
 
-        const reducer = (acc, c) => {
+        const reducer = (acc: ICost, c: IShip) => {
             var lost = this.initial[c.name] - (this.final[c.name] || 0);
             acc.metal += lost * c.metal || 0;
             acc.crystal += lost * c.crystal || 0;
@@ -84,7 +84,7 @@ export class BattleReport {
         var losses: ICost = { metal: 0, crystal: 0, deuterium: 0 };
 
         var playerCollection: IMap<Player> = this.winningPlayers;
-        const reducer = (acc, c) => {
+        const reducer = (acc: ICost, c: Player) => {
             acc.metal += c.losses.metal;
             acc.crystal += c.losses.crystal;
             acc.deuterium += c.losses.deuterium;
