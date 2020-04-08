@@ -1,4 +1,4 @@
-<div class="calculator container-fluid">
+<div class="calculator container-fluid mb-5">
   <h2>Calculator</h2>
   <app-calculator-controls [model]="model" [hidePlanet]="currentCalculator == CalculatorType.Recycle"
     (change)='navigate()'></app-calculator-controls>
@@ -7,7 +7,7 @@
   <app-recycle-calculator #calculator *ngIf="currentCalculator == CalculatorType.Recycle"></app-recycle-calculator>
 </div>
 
-<div role="navigation" class="footer">
+<footer role="navigation" class="fixed-bottom bg-light">
   <ul class="nav nav-pills nav-fill">
     <li class="nav-item">
       <a routerLink="/deploy" [class.active]="isLinkActive('/deploy')" [queryParams]="getState()" class="nav-link">
@@ -20,4 +20,4 @@
       </a>
     </li>
   </ul>
-</div>
+</footer>

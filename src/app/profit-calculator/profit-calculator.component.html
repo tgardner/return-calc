@@ -6,14 +6,12 @@
   <div class="row">
     <div class="col-md-12">
       <ckeditor [editor]="Editor" [(ngModel)]="report" [config]="{ toolbar: [] }"></ckeditor>
-      <!-- <textarea [(ngModel)]="report" style="height: 5em;" class="form-control">
-      </textarea> -->
       <div *ngIf="debug">
         {{report}}
       </div>
     </div>
   </div>
-  <div class="row top-buffer">
+  <div class="row mt-3">
     <div class="col-6">
       <button type="button" class="btn btn-primary" (click)="parse()">
         <span class="fa fa-search"></span> Parse
@@ -25,7 +23,7 @@
       </button>
     </div>
   </div>
-  <div *ngIf="!!battleReport" class="top-buffer">
+  <div *ngIf="!!battleReport" class="mt-3">
     <h3>Winner: {{battleReport.winner == 0 ? "Attacker" : "Defender"}}</h3>
     <h3>Losses</h3>
     <h4>Attackers</h4>
