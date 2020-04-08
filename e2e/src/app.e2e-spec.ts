@@ -9,6 +9,6 @@ describe('workspace-project App', () => {
 
   it('should display welcome message', () => {
     page.navigateTo();
-    expect(page.getTitleText()).toEqual('Welcome to return-calc!');
+    expect(page.getTitleText()).toEqual('CKD Pwnage Machine');
   });
 });
