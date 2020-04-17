@@ -63,7 +63,7 @@ export class RecycleCalculatorComponent {
 
   public stop(): void {
     this.reset();
-    this.flights.forEach(f => f.endTime = null);
+    this.flights.forEach(f => f.stop());
   }
 
   private tick(): void {

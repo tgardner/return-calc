@@ -7,14 +7,18 @@
   <p>&nbsp;</p>
 
   <div *ngIf="!!initial">
-    <button type="button" name="button" (click)="start()" *ngIf="!started" class="btn btn-primary btn-lg">Start</button>
+    <button type="button" name="button" (click)="start()" *ngIf="!flight?.startTime"
+      class="btn btn-primary btn-lg">Start</button>
 
-    <button type="button" name="button" (click)="stop()" *ngIf="started" class="btn btn-lg btn-danger">Stop</button>
+    <button type="button" name="button" (click)="stop()" *ngIf="flight?.startTime"
+      class="btn btn-lg btn-danger">Stop</button>
 
-    <button type="button" name="button" (click)="recall()" *ngIf="started"
+    <button type="button" name="button" (click)="recall()" *ngIf="flight?.startTime && !flight?.recallTime"
       class="btn btn-lg btn-secondary float-right">Recall</button>
   </div>
 
-  <h2 *ngIf="started" class="text-center">{{flight.remaining | time}}</h2>
-  <h3 *ngIf="started">Arrival: {{flight.endTime}}</h3>
+  <div *ngIf="flight?.startTime">
+    <h2 class="text-center">{{flight.remaining | time}}</h2>
+    <h3>Arrival: {{flight.endTime}}</h3>
+  </div>
 </div>

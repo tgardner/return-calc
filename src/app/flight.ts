@@ -1,32 +1,33 @@
 export class Flight {
-    constructor();
-    constructor(flightTime: number)
-    constructor(flightTime?: number) {
-        this.flightTime = flightTime || 0;
+    constructor(public flightDuration: number) {
     }
-    public flightTime: number;
-    public endTime: Date;
+
+    public startTime: Date;
+    public recallTime: Date;
+
+    public get endTime(): Date {
+        if (!this.startTime) return null;
+        if (this.recallTime) return new Date(+this.recallTime + (+this.recallTime - +this.startTime));
+        return new Date(+this.startTime + this.flightDuration * 1000);
+    }
 
     public get remaining(): number {
-        if (!this.endTime) return this.flightTime;
-
-        var now = new Date();
-        return Math.round((+this.endTime - +now) / 1000);
+        return !this.startTime ? this.flightDuration : Math.round((+this.endTime - +new Date()) / 1000);
     }
 
     public start(remaining?: number): void {
-        remaining = remaining || this.flightTime;
-        this.endTime = new Date();
-        this.endTime.setTime(this.endTime.getTime() + remaining * 1000);
+        remaining = remaining || this.flightDuration;
+        var start = new Date();
+        start.setTime(start.getTime() - 1000 * (this.flightDuration - remaining));
+        this.startTime = start;
     }
 
     public recall(): void {
-        var endTime = new Date();
-        endTime.setTime(endTime.getTime() + (this.flightTime - this.remaining) * 1000);
-        this.endTime = endTime;
+        this.recallTime = new Date();
     }
 
     public stop(): void {
-        this.endTime = null;
+        this.startTime = null;
+        this.recallTime = null;
     }
 }

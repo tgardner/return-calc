@@ -14,8 +14,6 @@ const timeInterval = interval(100);
 })
 export class DeployCalculatorComponent {
   private timer: Subscription;
-  public started: boolean = false;
-  public recalled: boolean = false;
   public flight: Flight;
   public initial: string;
 
@@ -31,34 +29,32 @@ export class DeployCalculatorComponent {
       return;
     }
 
+    var params = this.route.snapshot.queryParams;
     this.flight = new Flight(flightTime);
     this.initial = this.timePipe.transform(flightTime);
-    var params = this.route.snapshot.queryParams;
-    if (params["arrivalTime"])
-      this.flight.endTime = new Date(params["arrivalTime"]);
+    if (params["startTime"])
+      this.flight.startTime = new Date(params["startTime"]);
 
-    this.started = params["started"] == "true";
-    this.recalled = params["recalled"] == "true";
+    if (params["recallTime"])
+      this.flight.recallTime = new Date(params["recallTime"]);
 
     if (this.timer) {
       this.timer.unsubscribe();
       this.timer = null;
     }
 
-    if (this.started) {
-      this.timer = timeInterval.subscribe(() => {
-        this.tick();
-      });
+    if (this.flight.startTime) {
+      this.timer = timeInterval.subscribe(() => this.tick());
     }
   }
 
   private navigate() {
     var data = {
-      arrivalTime: this.flight?.endTime?.toISOString() || "",
-      started: this.started,
-      recalled: this.recalled
+      startTime: this.flight?.startTime?.toISOString() || "",
+      recallTime: this.flight?.recallTime?.toISOString() || ""
     };
 
+    var initial = this.initial;
     this.router.navigate(
       [],
       {
@@ -66,28 +62,23 @@ export class DeployCalculatorComponent {
         queryParams: data,
         queryParamsHandling: 'merge',
         replaceUrl: true
+      }).then(() => {
+        // Restore any overridden initial time
+        this.initial = initial;
       });
   }
 
   public start(): void {
-    var a = this.initial.split(':'); // split it at the colons
-
-    // minutes are worth 60 seconds. Hours are worth 60 minutes.
-    var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
-    this.flight.start(seconds);
-    this.started = true;
+    this.flight.start(this.initialSeconds());
     this.navigate();
   }
 
   public recall(): void {
-    this.recalled = true;
     this.flight.recall();
     this.navigate();
   }
 
   public stop(): void {
-    this.started = false;
-    this.recalled = false;
     this.flight.stop();
     this.navigate();
   }
@@ -96,5 +87,12 @@ export class DeployCalculatorComponent {
     if (this.flight.remaining <= 0) {
       this.stop();
     }
+  }
+
+  private initialSeconds(): number {
+    var a = this.initial.split(':'); // split it at the colons
+
+    // minutes are worth 60 seconds. Hours are worth 60 minutes.
+    return (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
   }
 }
