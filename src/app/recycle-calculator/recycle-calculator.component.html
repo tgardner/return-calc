@@ -1,24 +1,17 @@
 <div [hidden]="!show" class="text-center">
   <p>
-    <button type="button"
-      name="button"
-      (click)="start()"
-      *ngIf="!started"
+    <button type="button" name="button" (click)="start()" *ngIf="!startTime"
       class="btn btn-primary btn-lg">Start</button>
 
-    <button type="button"
-      name="button"
-      (click)="stop()"
-      *ngIf="started"
-      class="btn btn-lg btn-danger">Stop</button>
+    <button type="button" name="button" (click)="stop()" *ngIf="startTime" class="btn btn-lg btn-danger">Stop</button>
   </p>
-  <div *ngIf="started && selected !== null">
-      <h2 class="text-center">
-        Slot {{selected + 1}} -
-        <span *ngIf="flights[selected].remaining <= 0">Arrived</span>
-        <span *ngIf="flights[selected].remaining > 0">{{flights[selected].remaining | time}}</span>
-      </h2>
-      <h3>Arrival: {{flights[selected].endTime}}</h3>
+  <div *ngIf="startTime && selected !== null">
+    <h2 class="text-center">
+      Slot {{selected + 1}} -
+      <span *ngIf="flights[selected].remaining <= 0">Arrived</span>
+      <span *ngIf="flights[selected].remaining > 0">{{flights[selected].remaining | time}}</span>
+    </h2>
+    <h3>Arrival: {{flights[selected].endTime}}</h3>
   </div>
   <div class="table-responsive">
     <table class="table table-hover">
@@ -28,8 +21,7 @@
           <th>Arrival</th>
           <th style="width: 50%;">End Time</th>
         </tr>
-        <tr *ngFor="let flight of flights; let i = index" (click)="selected = i"
-          [ngClass]="{'active': selected === i}">
+        <tr *ngFor="let flight of flights; let i = index" (click)="selected = i" [ngClass]="{'active': selected === i}">
           <td scope="row">{{i + 1}}</td>
           <td>
             <span *ngIf="flight.remaining <= 0">Arrived</span>

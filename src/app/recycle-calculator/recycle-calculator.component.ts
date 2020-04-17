@@ -2,8 +2,10 @@ import { Component } from '@angular/core';
 import { Calculator } from '../calculator';
 import { interval, Subscription } from 'rxjs';
 import { Flight } from '../flight';
+import { Router, ActivatedRoute } from '@angular/router';
 
 const timeInterval = interval(100);
+const maxPlanets = 15;
 
 @Component({
   selector: 'app-recycle-calculator',
@@ -13,12 +15,14 @@ const timeInterval = interval(100);
 export class RecycleCalculatorComponent {
   public flights: Flight[];
   public show: boolean = false;
-  public started: boolean = false;
+  public startTime: Date;
   public selected?: number = null;
   private calculator: Calculator;
-  private timer : Subscription;
+  private timer: Subscription;
 
-  constructor() {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute) {
   }
 
   public calculate(calculator: Calculator): void {
@@ -34,36 +38,57 @@ export class RecycleCalculatorComponent {
     }
 
     this.show = true;
-    this.flights = [];
-    for (var i = 1; i <= 15; ++i) {
-      this.calculator.end.planet = i;
-      var flight = new Flight(this.calculator.calculateFlightTime());
-      this.flights.push(flight);
+    this.flights = new Array(maxPlanets);
+    for (var i = 0; i < maxPlanets; ++i) {
+      this.calculator.end.planet = i + 1;
+      var duration = this.calculator.calculateFlightTime();
+      this.flights[i] = new Flight(duration);
+    }
+
+    var params = this.route.snapshot.queryParams;
+    if (params["startTime"]) {
+      this.startTime = new Date(params["startTime"]);
+      this.flights.forEach(f => {
+        var r = f.duration - (+new Date() - +this.startTime) / 1000;
+        f.start(r);
+      })
+      this.timer = timeInterval.subscribe(() => this.tick());
     }
   }
+
+  private navigate() {
+    var data = {
+      startTime: this.startTime?.toISOString() || ""
+    };
+
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams: data,
+        queryParamsHandling: 'merge',
+        replaceUrl: true
+      });
+  }
+
 
   private reset(): void {
     if (this.timer) {
       this.timer.unsubscribe();
       this.timer = null;
     }
-    this.started = false;
+    this.startTime = null;
     this.selected = null;
   }
 
   public start(): void {
-    this.started = true;
-
-    this.flights.forEach(f => f.start());
-
-    this.timer = timeInterval.subscribe(() => {
-      this.tick();
-    });
+    this.startTime = new Date();
+    this.navigate();
   }
 
   public stop(): void {
     this.reset();
-    this.flights.forEach(f => f.stop());
+    this.navigate();
   }
 
   private tick(): void {
