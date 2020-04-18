@@ -29,9 +29,10 @@ export class DeployCalculatorComponent {
       return;
     }
 
+    this.initial = this.timePipe.transform(flightTime);
+
     var params = this.route.snapshot.queryParams;
     this.flight = new Flight(flightTime);
-    this.initial = this.timePipe.transform(flightTime);
     if (params["startTime"])
       this.flight.startTime = new Date(params["startTime"]);
 
