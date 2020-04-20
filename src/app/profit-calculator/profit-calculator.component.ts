@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BattleReportParser, BattleReport } from '../battle-report';
+import { BattleReportParser, BattleReport, Winner } from '../battle-report';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
@@ -23,5 +23,9 @@ export class ProfitCalculatorComponent {
   public clear(): void {
     this.report = '';
     this.battleReport = null;
+  }
+
+  public changeWinner($event) {
+    this.battleReport.winner = $event.target.checked ? Winner.Attacker : Winner.Defender;
   }
 }

@@ -24,7 +24,14 @@
     </div>
   </div>
   <div *ngIf="!!battleReport" class="mt-3">
-    <h3>Winner: {{battleReport.winner == 0 ? "Attacker" : "Defender"}}</h3>
+    <h3>
+      Winner: {{battleReport.winner == 0 ? "Attacker" : "Defender"}}
+      <span class="custom-control-inline custom-switch">
+        <input type="checkbox" class="custom-control-input" id="winner" (change)="changeWinner($event)"
+          [checked]="battleReport.winner == 0">
+        <label class="custom-control-label" for="winner" title="Switch Winner">&nbsp;</label>
+      </span>
+    </h3>
     <h3>Losses</h3>
     <h4>Attackers</h4>
     <table class="table table-striped">
