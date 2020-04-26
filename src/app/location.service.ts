@@ -2,6 +2,9 @@ import { Injectable, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Planet } from './planet';
 
+const PlanetsPerSystem = 15;
+const GalaxyRows = PlanetsPerSystem + 1;
+
 export class LocationServiceConfig {
   url: string
 }
@@ -11,9 +14,6 @@ export interface ILocation {
   player: string
 }
 
-const PlanetsPerSystem = 15;
-const GalaxyRows = PlanetsPerSystem + 1;
-
 @Injectable({
   providedIn: 'root'
 })
@@ -21,10 +21,8 @@ export class LocationService {
   public readonly url: string;
 
   constructor(private http: HttpClient,
-    @Optional() config?: LocationServiceConfig) {
-    if (config) {
-      this.url = config.url;
-    }
+    config: LocationServiceConfig) {
+    this.url = config.url;
   }
 
   public async get() {
@@ -48,7 +46,7 @@ export class LocationService {
     for (var row = 0; row < json.table.rows.length; ++row) {
       var r = json.table.rows[row];
       if (!r || row % GalaxyRows < 1 || row % GalaxyRows > PlanetsPerSystem) continue;
-      
+
       for (var col = 0; col < json.table.cols.length; ++col) {
         var c = r.c[col];
         if (!c || !c.v || col === 0) continue;
@@ -60,7 +58,7 @@ export class LocationService {
         });
       }
     }
-    
+
     return locations;
   }
 
