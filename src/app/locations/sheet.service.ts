@@ -12,7 +12,8 @@ export class SheetServiceConfig {
 })
 export class SheetService extends BaseService {
   private galaxyRows: number;
-  constructor(private http: HttpClient, private config: SheetServiceConfig) {
+
+  constructor(private http: HttpClient, public config: SheetServiceConfig) {
     super();
 
     this.galaxyRows = this.systemPlanets + 1;
@@ -29,7 +30,7 @@ export class SheetService extends BaseService {
     this.data = this.parseResponse(data);
     return this.data;
   }
-  
+
   private parseResponse(response: string): ILocation[] {
     var result = response.replace("/*O_o*/", "").replace(/.*\(/, "");
     result = result.substring(0, result.length - 2);
@@ -40,7 +41,7 @@ export class SheetService extends BaseService {
   private parseRows(rows: any[]): ILocation[] {
     var data = [];
     for (var i = 0; i < rows.length; ++i) {
-      if (i % this.galaxyRows === this.galaxyRows - 1 || i % this.galaxyRows == 0) continue;
+      if (i % this.galaxyRows > this.systemPlanets || i % this.galaxyRows == 0) continue;
       var row = rows[i];
 
       for (var j = 0; j < row.c.length; ++j) {

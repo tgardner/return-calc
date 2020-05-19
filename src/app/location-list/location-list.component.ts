@@ -15,7 +15,7 @@ export class LocationListComponent implements OnInit {
   public searchResults: ILocation[] = [];
   public Math: any;
 
-  constructor(private locationService: SheetService) {
+  constructor(public locationService: SheetService) {
     this.Math = Math;
   }
 
@@ -36,6 +36,5 @@ export class LocationListComponent implements OnInit {
 
   public search() : void {
     this.searchResults = this.locationService.search(this.searchTerm);
-    results.sort(function(a,b) {
   }
 }
