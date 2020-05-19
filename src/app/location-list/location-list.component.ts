@@ -25,7 +25,8 @@ export class LocationListComponent implements OnInit {
   }
 
   public onChange() : void {
-    this.players = this.locationService.system(this.galaxy, this.system);
+    this.players = this.locationService.system(this.galaxy, this.system)
+      .map(l => l?.player);
   }
 
   public catchSearchEnter($event: any): void {

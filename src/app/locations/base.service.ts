@@ -2,7 +2,7 @@ import { ILocation } from './ilocation';
 
 interface LocationService {
   load(): Promise<ILocation[]>
-  system(galaxy: number, system: number): string[];
+  system(galaxy: number, system: number): ILocation[];
   search(searchTerm: string): ILocation[];
 }
 
@@ -16,14 +16,14 @@ export class BaseService implements LocationService {
     throw new Error("Method not implemented.");
   }
 
-  system(galaxy: number, system: number): string[] {
-    let result: string[] = new Array(this.systemPlanets);
+  system(galaxy: number, system: number): ILocation[] {
+    let result: ILocation[] = new Array(this.systemPlanets);
 
     var data = this.data.filter(l => l.galaxy == galaxy && l.system == system);
 
     for (var i = 0; i < data.length; ++i) {
       var location = data[i];
-      result[location.planet - 1] = location.player;
+      result[location.planet - 1] = location;
     }
 
     return result;
