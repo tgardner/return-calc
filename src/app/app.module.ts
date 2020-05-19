@@ -15,7 +15,7 @@ import { RecycleCalculatorComponent } from './recycle-calculator/recycle-calcula
 import { LocationListComponent } from './location-list/location-list.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProfitCalculatorComponent } from './profit-calculator/profit-calculator.component';
-import { LocationServiceConfig } from './location.service';
+import { SheetServiceConfig } from './locations/sheet.service';
 
 @NgModule({
   declarations: [
@@ -41,8 +41,7 @@ import { LocationServiceConfig } from './location.service';
     TimePipe,
     Title,
     {
-      provide: LocationServiceConfig,
-      useValue: {
+      provide: SheetServiceConfig, useValue: {
         url: "https://docs.google.com/spreadsheets/d/1-jGoyvLPn1WqqtxzldSBXVA_i8kJxJNGejQbcOTbXFs"
       }
     }
