@@ -2,10 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SheetServiceConfig } from './sheet.service';
 import { JsonServiceConfig } from './json.service';
-import { JsonbinServiceConfig } from './jsonbin.service';
+import { JsonbinServiceConfig, JsonbinService } from './jsonbin.service';
 import { LocationListComponent } from './list.component';
 import { FormsModule } from '@angular/forms';
 import { LocationRoutingModule } from './location-routing.module';
+import { LocationService } from './location.service';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,9 @@ import { LocationRoutingModule } from './location-routing.module';
     LocationRoutingModule
   ],
   providers: [
+    {
+      provide: LocationService, useClass: JsonbinService
+    },
     {
       provide: SheetServiceConfig, useValue: {
         url: "https://docs.google.com/spreadsheets/d/1-jGoyvLPn1WqqtxzldSBXVA_i8kJxJNGejQbcOTbXFs"

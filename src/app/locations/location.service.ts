@@ -1,20 +1,14 @@
 import { ILocation } from './ilocation';
+import { Injectable } from '@angular/core';
 
-interface LocationService {
-  load(): Promise<ILocation[]>
-  system(galaxy: number, system: number): ILocation[];
-  search(searchTerm: string): ILocation[];
-}
-
-export class BaseService implements LocationService {
+@Injectable()
+export abstract class LocationService {
   protected data: ILocation[] = [];
   protected systemPlanets = 15;
 
   constructor() { }
 
-  load(): Promise<ILocation[]> {
-    throw new Error("Method not implemented.");
-  }
+  abstract load(): Promise<ILocation[]>;
 
   system(galaxy: number, system: number): ILocation[] {
     let result: ILocation[] = new Array(this.systemPlanets);

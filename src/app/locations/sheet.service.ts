@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BaseService } from './base.service';
+import { LocationService } from './location.service';
 import { ILocation } from './ilocation';
 
 export class SheetServiceConfig {
   url: string
 }
 
-@Injectable({
-  providedIn: 'root'
-})
-export class SheetService extends BaseService {
+@Injectable()
+export class SheetService extends LocationService {
   private galaxyRows: number;
 
   constructor(private http: HttpClient, public config: SheetServiceConfig) {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ILocation } from './ilocation';
-import { BaseService } from './base.service';
+import { LocationService } from './location.service';
 
 export class JsonbinServiceConfig {
   binId: string;
@@ -12,10 +12,8 @@ interface IDataStore {
   locations: ILocation[];
 }
 
-@Injectable({
-  providedIn: 'root'
-})
-export class JsonbinService extends BaseService {
+@Injectable()
+export class JsonbinService extends LocationService {
 
   constructor(private http: HttpClient, public config: JsonbinServiceConfig) {
     super();
