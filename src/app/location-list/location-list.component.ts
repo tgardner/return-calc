@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SheetService } from '../locations/sheet.service';
 import { ILocation } from '../locations/ilocation';
+import { JsonService } from '../locations/json.service';
+import { JsonbinService } from '../locations/jsonbin.service';
 
 @Component({
   selector: 'app-location-list',
@@ -15,7 +17,14 @@ export class LocationListComponent implements OnInit {
   public searchResults: ILocation[] = [];
   public Math: any;
 
-  constructor(public locationService: SheetService) {
+  public get url(): string {
+    if(!this.locationService || this.locationService instanceof SheetService) {
+      return (this.locationService.config as any).url;
+    }
+    return null;
+  }
+
+  constructor(public locationService: JsonbinService) {
     this.Math = Math;
   }
 
