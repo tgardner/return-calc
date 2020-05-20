@@ -36,7 +36,7 @@ steps:
   condition: succeededOrFailed()
   inputs:
     codeCoverageTool: 'Cobertura'
-    summaryFileLocation: '$(Build.SourcesDirectory)/coverage/return-calc/cobertura-coverage.xml'
+    summaryFileLocation: '$(Build.SourcesDirectory)/coverage/cobertura-coverage.xml'
   displayName: 'Publish Code Coverage Results'
 
 - task: PublishBuildArtifacts@1
