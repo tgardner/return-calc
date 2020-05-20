@@ -1,25 +1,24 @@
-import { Injectable } from '@angular/core';
-import { LocationService } from './location.service';
-import { ILocation } from './ilocation';
+import { LocationService, ILocation } from './location.service';
 import { HttpClient } from '@angular/common/http';
-
-export class JsonServiceConfig {
-  url: string
-}
+import { EnvService } from '../config/env.service';
 
 interface IDataStore {
   locations: ILocation[];
 }
 
-@Injectable()
 export class JsonService extends LocationService {
-  constructor(private http: HttpClient, public config: JsonServiceConfig) {
+  constructor(private http: HttpClient, private env: EnvService) {
     super();
   }
-  
+
   async load(): Promise<ILocation[]> {
-    var data = await this.http.get<IDataStore>(this.config.url).toPromise();
-    this.data = data.locations;
+    try {
+      var data = await this.http.get<IDataStore>(this.env.get("url")).toPromise();
+      this.data = data.locations;
+    } catch(e) {
+      console.error(e);
+      this.data = [];
+    }
     return this.data;
   }
 }

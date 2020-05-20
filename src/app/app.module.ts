@@ -15,6 +15,7 @@ import { RecycleCalculatorComponent } from './recycle-calculator/recycle-calcula
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProfitCalculatorComponent } from './profit-calculator/profit-calculator.component';
 import { LocationsModule } from './locations/locations.module';
+import { ConfigModule } from './config/config.module';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { LocationsModule } from './locations/locations.module';
     NgbModule,
     HttpClientModule,
     CKEditorModule,
-    LocationsModule
+    LocationsModule,
+    ConfigModule
   ],
   providers: [
     TimePipe,

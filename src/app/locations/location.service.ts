@@ -1,7 +1,10 @@
-import { ILocation } from './ilocation';
-import { Injectable } from '@angular/core';
+export interface ILocation {
+  galaxy: number,
+  system: number,
+  planet: number,
+  player?: string
+}
 
-@Injectable()
 export abstract class LocationService {
   protected data: ILocation[] = [];
   protected systemPlanets = 15;

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { SheetService, SheetServiceConfig } from './sheet.service';
-import { ILocation } from './ilocation';
-import { JsonbinService } from './jsonbin.service';
-import { LocationService } from './location.service';
+import { LocationService, ILocation } from './location.service';
+import { EnvService } from '../config/env.service';
 
 @Component({
   selector: 'app-location-list',
@@ -18,10 +16,13 @@ export class LocationListComponent implements OnInit {
   public Math: any;
 
   public get url(): string {
-    return this.sheetConfig?.url;
+    if (this.env.get("storageProvider").toUpperCase() == "SHEET") {
+      return this.env.get("url");
+    }
+    return null;
   }
 
-  constructor(public locationService: LocationService, private sheetConfig? : SheetServiceConfig) {
+  constructor(public locationService: LocationService, private env: EnvService) {
     this.Math = Math;
   }
 
@@ -30,7 +31,7 @@ export class LocationListComponent implements OnInit {
     this.onChange();
   }
 
-  public onChange() : void {
+  public onChange(): void {
     this.players = this.locationService.system(this.galaxy, this.system)
       .map(l => l?.player);
   }
@@ -41,7 +42,7 @@ export class LocationListComponent implements OnInit {
     }
   }
 
-  public search() : void {
+  public search(): void {
     this.searchResults = this.locationService.search(this.searchTerm);
   }
 }

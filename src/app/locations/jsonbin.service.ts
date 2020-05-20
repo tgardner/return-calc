@@ -1,31 +1,25 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ILocation } from './ilocation';
-import { LocationService } from './location.service';
-
-export class JsonbinServiceConfig {
-  binId: string;
-  secretKey: string;
-}
+import { LocationService, ILocation } from './location.service';
+import { EnvService } from '../config/env.service';
 
 interface IDataStore {
   locations: ILocation[];
 }
 
-@Injectable()
 export class JsonbinService extends LocationService {
 
-  constructor(private http: HttpClient, public config: JsonbinServiceConfig) {
+  constructor(private http: HttpClient, private env: EnvService) {
     super();
   }
-  
+
   async load(): Promise<ILocation[]> {
-    const url = `https://api.jsonbin.io/b/${this.config.binId}/latest`;
+    const url = `https://api.jsonbin.io/b/${this.env.get('binId')}/latest`;
     var data = await this.http.get<IDataStore>(url, {
       headers: {
-        "secret-key": this.config.secretKey
+        "secret-key": this.env.get('secretKey')
       }
     }).toPromise();
+
     this.data = data.locations;
     return this.data;
   }

@@ -1,24 +1,18 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { LocationService } from './location.service';
-import { ILocation } from './ilocation';
+import { LocationService, ILocation } from './location.service';
+import { EnvService } from '../config/env.service';
 
-export class SheetServiceConfig {
-  url: string
-}
-
-@Injectable()
 export class SheetService extends LocationService {
   private galaxyRows: number;
 
-  constructor(private http: HttpClient, public config: SheetServiceConfig) {
+  constructor(private http: HttpClient, private env : EnvService) {
     super();
 
     this.galaxyRows = this.systemPlanets + 1;
   }
 
   async load(): Promise<ILocation[]> {
-    const url = this.config.url + "/gviz/tq";
+    const url = this.env.get('url') + "/gviz/tq";
     var data = await this.http.get(url, {
       responseType: 'text',
       params: {
