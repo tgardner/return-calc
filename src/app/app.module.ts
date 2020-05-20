@@ -12,12 +12,9 @@ import { TimePipe } from './time.pipe';
 import { CalculatorControlsComponent } from './calculator-controls/calculator-controls.component';
 import { DeployCalculatorComponent } from './deploy-calculator/deploy-calculator.component';
 import { RecycleCalculatorComponent } from './recycle-calculator/recycle-calculator.component';
-import { LocationListComponent } from './location-list/location-list.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProfitCalculatorComponent } from './profit-calculator/profit-calculator.component';
-import { SheetServiceConfig } from './locations/sheet.service';
-import { JsonServiceConfig } from './locations/json.service';
-import { JsonbinServiceConfig } from './locations/jsonbin.service';
+import { LocationsModule } from './locations/locations.module';
 
 @NgModule({
   declarations: [
@@ -27,7 +24,6 @@ import { JsonbinServiceConfig } from './locations/jsonbin.service';
     CalculatorControlsComponent,
     DeployCalculatorComponent,
     RecycleCalculatorComponent,
-    LocationListComponent,
     PageNotFoundComponent,
     ProfitCalculatorComponent
   ],
@@ -37,27 +33,12 @@ import { JsonbinServiceConfig } from './locations/jsonbin.service';
     FormsModule,
     NgbModule,
     HttpClientModule,
-    CKEditorModule
+    CKEditorModule,
+    LocationsModule
   ],
   providers: [
     TimePipe,
-    Title,
-    {
-      provide: SheetServiceConfig, useValue: {
-        url: "https://docs.google.com/spreadsheets/d/1-jGoyvLPn1WqqtxzldSBXVA_i8kJxJNGejQbcOTbXFs"
-      }
-    },
-    {
-      provide: JsonServiceConfig, useValue: {
-        url: "/assets/data.json"
-      }
-    },
-    {
-      provide: JsonbinServiceConfig, useValue: {
-        secretKey: "$2b$10$n.92mRWeif1bwrr11kK3OO0CfiEcu.xTz5sGu4/31R1JA5b9dpGV6",
-        binId: "5eae628947a2266b1471d702"
-      }
-    }
+    Title
   ],
   bootstrap: [AppComponent]
 })

@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { SheetService } from '../locations/sheet.service';
-import { ILocation } from '../locations/ilocation';
-import { JsonService } from '../locations/json.service';
-import { JsonbinService } from '../locations/jsonbin.service';
+import { SheetService } from './sheet.service';
+import { ILocation } from './ilocation';
+import { JsonbinService } from './jsonbin.service';
 
 @Component({
   selector: 'app-location-list',
-  templateUrl: './location-list.component.html',
-  styleUrls: ['./location-list.component.scss']
+  templateUrl: './list.component.html',
+  styleUrls: ['./list.component.scss']
 })
 export class LocationListComponent implements OnInit {
   public galaxy: number = 1;
