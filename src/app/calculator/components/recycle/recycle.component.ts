@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
-import { Flight } from '../../../shared/flight';
+import { Flight } from '../../flight';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { TimePipe } from 'src/app/shared/time.pipe';
+import { TimePipe } from 'src/app/calculator/pipes/time.pipe';
 import { BaseCalculator } from '../../base-calculator';
 import { CalculatorService } from '../../calculator.service';
 

@@ -7,20 +7,23 @@ import { RecycleComponent } from './components/recycle/recycle.component';
 import { ControlsComponent } from './components/controls/controls.component';
 import { FormsModule } from '@angular/forms';
 import { CalculatorComponent } from './components/calculator/calculator.component';
-import { SharedModule } from '../shared/shared.module';
+import { TimePipe } from './pipes/time.pipe';
 
 @NgModule({
   declarations: [
     DeployComponent,
     RecycleComponent,
     ControlsComponent,
-    CalculatorComponent
+    CalculatorComponent,
+    TimePipe
   ],
   imports: [
     CommonModule,
     FormsModule,
-    CalculatorRoutingModule,
-    SharedModule
+    CalculatorRoutingModule
+  ],
+  providers: [
+    TimePipe
   ]
 })
 export class CalculatorModule { }

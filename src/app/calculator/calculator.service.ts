@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Calculator } from './calculator';
-import { Planet } from '../shared/planet';
+import { Planet } from './planet';
 import { Params } from '@angular/router';
 
 @Injectable({

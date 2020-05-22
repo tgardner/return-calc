@@ -1,5 +1,5 @@
-import { SHIPS } from '../shared/ship';
-import { Planet } from '../shared/planet';
+import { SHIPS } from '../ship';
+import { Planet } from './planet';
 
 export interface ICalculator {
   start: Planet;
