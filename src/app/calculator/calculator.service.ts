@@ -14,9 +14,9 @@ export class CalculatorService {
     impulse: 15,
     hyperspace: 14
   });
-  
-  constructor() { 
-    
+
+  constructor() {
+
   }
 
   public load(params: Params) {
@@ -24,20 +24,25 @@ export class CalculatorService {
       return;
     }
 
-    for (var i in params) {
+    for (const i in params) {
+      if (!params.hasOwnProperty(i)) {
+        continue;
+      }
+
       switch (i) {
-        case "start":
-        case "end":
+        case 'start':
+        case 'end':
           this.model[i] = new Planet(params[i]);
           break;
-        case "ships":
+        case 'ships':
           this.model.ships
             .filter(ship => params[i].indexOf(ship.name) >= 0)
             .forEach(s => s.selected = true);
           break;
         default:
-          if (this.model.hasOwnProperty(i))
+          if (this.model.hasOwnProperty(i)) {
             this.model[i] = parseFloat(params[i]);
+          }
           break;
       }
     }

@@ -18,18 +18,18 @@ class Player {
     }
 
     public loadShips(ships: IMap<number>, initial: boolean = true): void {
-        var map: IMap<number> = initial ? this.initial : this.final;
-        for (var i in ships) {
-            if (allowedShips.indexOf(i) < 0) continue;
+        const map: IMap<number> = initial ? this.initial : this.final;
+        for (const i in ships) {
+            if (allowedShips.indexOf(i) < 0) { continue; }
             map[i] = (map[i] || 0) + ships[i];
         }
     }
 
     private calculateLosses(): ICost {
-        var losses: ICost = { metal: 0, crystal: 0, deuterium: 0 };
+        const losses: ICost = { metal: 0, crystal: 0, deuterium: 0 };
 
         const reducer = (acc: ICost, c: IShip) => {
-            var lost = this.initial[c.name] - (this.final[c.name] || 0);
+            const lost = this.initial[c.name] - (this.final[c.name] || 0);
             acc.metal += lost * c.metal || 0;
             acc.crystal += lost * c.crystal || 0;
             acc.deuterium += lost * c.deuterium || 0;
@@ -60,10 +60,10 @@ export class BattleReport {
             crystal: this.resources.crystal + this.debris.crystal - this.losses.crystal,
             deuterium: this.resources.deuterium + this.debris.deuterium - this.losses.deuterium
         };
-    };
+    }
     public get dividend(): ICost {
-        var playerCollection: IMap<Player> = this.winningPlayers;
-        var players = Object.keys(playerCollection).length;
+        const playerCollection: IMap<Player> = this.winningPlayers;
+        const players = Object.keys(playerCollection).length;
 
         return {
             metal: Math.round(this.profit.metal / players),
@@ -80,9 +80,9 @@ export class BattleReport {
     public winner: Winner = Winner.Defender;
 
     private calculateLosses(): ICost {
-        var losses: ICost = { metal: 0, crystal: 0, deuterium: 0 };
+        const losses: ICost = { metal: 0, crystal: 0, deuterium: 0 };
 
-        var playerCollection: IMap<Player> = this.winningPlayers;
+        const playerCollection: IMap<Player> = this.winningPlayers;
         const reducer = (acc: ICost, c: Player) => {
             acc.metal += c.losses.metal;
             acc.crystal += c.losses.crystal;
@@ -99,15 +99,15 @@ export class BattleReportParser {
     }
 
     public parse(report: string): BattleReport {
-        let result = new BattleReport();
-        let parser = new DOMParser();
-        let reportDoc = parser.parseFromString(report, 'text/html');
+        const result = new BattleReport();
+        const parser = new DOMParser();
+        const reportDoc = parser.parseFromString(report, 'text/html');
 
-        var header = reportDoc.querySelector("p")?.textContent;
-        if (header == null) return null;
+        const header = reportDoc.querySelector('p')?.textContent;
+        if (header == null) { return null; }
 
-        var obtainedRegex = /obtaining ([0-9,]+) Metal, ([0-9,]+) Crystal and ([0-9,]+) Deuterium/gi;
-        var matches = obtainedRegex.exec(header);
+        const obtainedRegex = /obtaining ([0-9,]+) Metal, ([0-9,]+) Crystal and ([0-9,]+) Deuterium/gi;
+        let matches = obtainedRegex.exec(header);
         if (matches != null) {
             result.resources = {
                 metal: this.santizeNumber(matches[1]),
@@ -116,8 +116,8 @@ export class BattleReportParser {
             };
         }
 
-        var debrisRegex = /debris\sfield\sof\s([0-9,']+)\smetal\sand\s([0-9,']+)\scrystal/i;
-        var matches = debrisRegex.exec(header);
+        const debrisRegex = /debris\sfield\sof\s([0-9,']+)\smetal\sand\s([0-9,']+)\scrystal/i;
+        matches = debrisRegex.exec(header);
         if (matches != null) {
             result.debris = {
                 metal: this.santizeNumber(matches[1]),
@@ -126,14 +126,15 @@ export class BattleReportParser {
             };
         }
 
-        result.winner = header.indexOf("The attacker has won the battle") >= 0 ?
+        result.winner = header.indexOf('The attacker has won the battle') >= 0 ?
             Winner.Attacker : Winner.Defender;
 
         // Load Initial
-        var attackers = reportDoc.querySelectorAll('table td:first-child');
-        var defenders = reportDoc.querySelectorAll('table td:last-child');
-        if (attackers.length < 2 || defenders.length < 2)
+        const attackers = reportDoc.querySelectorAll('table td:first-child');
+        const defenders = reportDoc.querySelectorAll('table td:last-child');
+        if (attackers.length < 2 || defenders.length < 2) {
             return null;
+        }
 
         this.parsePlayers(result.attackers, attackers[0].innerHTML, true);
         this.parsePlayers(result.defenders, defenders[0].innerHTML, true);
@@ -146,25 +147,26 @@ export class BattleReportParser {
     }
 
     private parsePlayers(collection: IMap<Player>, input: string, initial: boolean = false): void {
-        var unparsed = input;
-        var nameRegex = /^(<p>)?<strong>([a-z0-9_-]+)(\s\[\d:\d{1,3}:\d{1,3}\s\([MP]\)\])?<\/strong><br><strong>WSA:[0-9+%/]+<\/strong>(Ships|Defense|Destroyed)(<\/p>)?/i;
-        var shipRegex = /^<p>([^>]+)<\/p><p>([0-9,]+)<\/p>(<p>Defense<\/p>)?/i
-        var match = unparsed.match(nameRegex);
+        let unparsed = input;
+        // tslint:disable-next-line: max-line-length
+        const nameRegex = /^(<p>)?<strong>([a-z0-9_-]+)(\s\[\d:\d{1,3}:\d{1,3}\s\([MP]\)\])?<\/strong><br><strong>WSA:[0-9+%/]+<\/strong>(Ships|Defense|Destroyed)(<\/p>)?/i;
+        const shipRegex = /^<p>([^>]+)<\/p><p>([0-9,]+)<\/p>(<p>Defense<\/p>)?/i;
+        let match = unparsed.match(nameRegex);
         while (match != null) {
-            var name = match[2];
+            const name = match[2];
             if (!collection[name]) {
                 collection[name] = new Player(name);
             }
 
-            var player = collection[name];
-            var ships: IMap<number> = {};
+            const player = collection[name];
+            const ships: IMap<number> = {};
 
-            unparsed = unparsed.replace(nameRegex, "");
-            var shipMatch = unparsed.match(shipRegex);
+            unparsed = unparsed.replace(nameRegex, '');
+            let shipMatch = unparsed.match(shipRegex);
 
             while (shipMatch != null) {
                 ships[shipMatch[1]] = this.santizeNumber(shipMatch[2]);
-                unparsed = unparsed.replace(shipRegex, "");
+                unparsed = unparsed.replace(shipRegex, '');
                 shipMatch = unparsed.match(shipRegex);
             }
             player.loadShips(ships, initial);
@@ -174,6 +176,6 @@ export class BattleReportParser {
 
     private santizeNumber(input: string): number {
         const santizeRegex = /[\,\']/g;
-        return parseInt(input.replace(santizeRegex, ''));
+        return parseInt(input.replace(santizeRegex, ''), 10);
     }
 }

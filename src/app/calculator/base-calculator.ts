@@ -18,7 +18,7 @@ export abstract class BaseCalculator implements OnInit {
     }
 
     public navigate(): Promise<boolean> {
-        var state = this.state();
+        const state = this.state();
 
         return this.router.navigate(
             [],

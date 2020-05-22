@@ -5,18 +5,18 @@ import { EnvService } from '../config/env.service';
 export class SheetService extends StorageService {
   private galaxyRows: number;
 
-  constructor(private http: HttpClient, private env : EnvService) {
+  constructor(private http: HttpClient, private env: EnvService) {
     super();
 
     this.galaxyRows = this.systemPlanets + 1;
   }
 
   async load(): Promise<ILocation[]> {
-    const url = this.env.get('url') + "/gviz/tq";
-    var data = await this.http.get(url, {
+    const url = this.env.get('url') + '/gviz/tq';
+    const data = await this.http.get(url, {
       responseType: 'text',
       params: {
-        headers: "0"
+        headers: '0'
       }
     }).toPromise();
     this.data = this.parseResponse(data);
@@ -24,23 +24,23 @@ export class SheetService extends StorageService {
   }
 
   private parseResponse(response: string): ILocation[] {
-    var result = response.replace("/*O_o*/", "").replace(/.*\(/, "");
+    let result = response.replace('/*O_o*/', '').replace(/.*\(/, '');
     result = result.substring(0, result.length - 2);
-    var json = JSON.parse(result);
+    const json = JSON.parse(result);
     return this.parseRows(json.table.rows);
   }
 
   private parseRows(rows: any[]): ILocation[] {
-    var data = [];
-    for (var i = 0; i < rows.length; ++i) {
-      if (i % this.galaxyRows > this.systemPlanets || i % this.galaxyRows == 0) continue;
-      var row = rows[i];
+    const data = [];
+    for (let i = 0; i < rows.length; ++i) {
+      if (i % this.galaxyRows > this.systemPlanets || i % this.galaxyRows === 0) { continue; }
+      const row = rows[i];
 
-      for (var j = 0; j < row.c.length; ++j) {
-        if (j == 0 || !row.c[j] || !row.c[j].v) continue;
-        var value = row.c[j].v;
+      for (let j = 0; j < row.c.length; ++j) {
+        if (j === 0 || !row.c[j] || !row.c[j].v) { continue; }
+        const value = row.c[j].v;
 
-        var location = this.cellToLocation(i, j);
+        const location = this.cellToLocation(i, j);
         location.player = value;
         data.push(location);
       }
@@ -50,9 +50,9 @@ export class SheetService extends StorageService {
   }
 
   private cellToLocation(row: number, col: number): ILocation {
-    var galaxy = Math.floor(row / this.galaxyRows) + 1
-    var system = col;
-    var planet = row % this.galaxyRows;
+    const galaxy = Math.floor(row / this.galaxyRows) + 1;
+    const system = col;
+    const planet = row % this.galaxyRows;
 
     return {
       galaxy: galaxy,

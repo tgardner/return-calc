@@ -13,9 +13,9 @@ export class JsonService extends StorageService {
 
   async load(): Promise<ILocation[]> {
     try {
-      var data = await this.http.get<IDataStore>(this.env.get("url")).toPromise();
+      const data = await this.http.get<IDataStore>(this.env.get('url')).toPromise();
       this.data = data.locations;
-    } catch(e) {
+    } catch (e) {
       console.error(e);
       this.data = [];
     }

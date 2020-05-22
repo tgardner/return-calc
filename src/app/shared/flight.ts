@@ -6,8 +6,8 @@ export class Flight {
     public recallTime: Date;
 
     public get endTime(): Date {
-        if (!this.startTime) return null;
-        if (this.recallTime) return new Date(+this.recallTime + (+this.recallTime - +this.startTime));
+        if (!this.startTime) { return null; }
+        if (this.recallTime) { return new Date(+this.recallTime + (+this.recallTime - +this.startTime)); }
         return new Date(+this.startTime + this.duration * 1000);
     }
 
@@ -17,7 +17,7 @@ export class Flight {
 
     public start(remaining?: number): void {
         remaining = remaining || this.duration;
-        var start = new Date();
+        const start = new Date();
         start.setTime(start.getTime() - 1000 * (this.duration - remaining));
         this.startTime = start;
     }

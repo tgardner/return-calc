@@ -17,9 +17,9 @@ export interface IShip extends ICost {
 }
 
 interface IEngine {
-  drive: Drive,
-  speed: number,
-  fuel: number
+  drive: Drive;
+  speed: number;
+  fuel: number;
 }
 
 class EngineCollection {
@@ -35,7 +35,7 @@ class EngineCollection {
   }
 
   public get(index: Drive): IEngine {
-    var engine = this.map.get(index);
+    const engine = this.map.get(index);
     return engine;
   }
 }
@@ -47,19 +47,19 @@ const bonusMap = new Map<Drive, number>([
 ]);
 
 class Ship implements IShip {
-  public static readonly SmallCargo = "Small Cargo";
-  public static readonly LargeCargo = "Large Cargo";
-  public static readonly LightFighter = "Light Fighter";
-  public static readonly HeavyFighter = "Heavy Fighter";
-  public static readonly Cruiser = "Cruiser";
-  public static readonly Battleship = "Battleship";
-  public static readonly ColonyShip = "Colony Ship";
-  public static readonly Recycler = "Recycler";
-  public static readonly EspionageProbe = "Espionage Probe";
-  public static readonly Bomber = "Bomber";
-  public static readonly Destroyer = "Destroyer";
-  public static readonly Deathstar = "Deathstar";
-  public static readonly Battlecruiser = "Battlecruiser";
+  public static readonly SmallCargo = 'Small Cargo';
+  public static readonly LargeCargo = 'Large Cargo';
+  public static readonly LightFighter = 'Light Fighter';
+  public static readonly HeavyFighter = 'Heavy Fighter';
+  public static readonly Cruiser = 'Cruiser';
+  public static readonly Battleship = 'Battleship';
+  public static readonly ColonyShip = 'Colony Ship';
+  public static readonly Recycler = 'Recycler';
+  public static readonly EspionageProbe = 'Espionage Probe';
+  public static readonly Bomber = 'Bomber';
+  public static readonly Destroyer = 'Destroyer';
+  public static readonly Deathstar = 'Deathstar';
+  public static readonly Battlecruiser = 'Battlecruiser';
 
   public constructor(ship: Partial<IShip>) {
     Object.assign(this, ship);
@@ -71,10 +71,10 @@ class Ship implements IShip {
   public readonly metal: number = 0;
   public readonly crystal: number = 0;
   public readonly deuterium: number = 0;
-  public selected: boolean = false;
+  public selected = false;
 
   public getEngine(combustion: number, impulse: number, hyperspace: number): IEngine {
-    var engine = this.engines.defaultEngine;
+    let engine = this.engines.defaultEngine;
 
     // Engine Upgrades
     if (this.name === Ship.SmallCargo && impulse >= 5) {
@@ -97,10 +97,10 @@ class Ship implements IShip {
       [Drive.Hyperspace, hyperspace],
     ]);
 
-    var engine = this.getEngine(combustion, impulse, hyperspace);
-    var speed = this.engines.get(engine.drive).speed;
-    var level = levelMap.get(engine.drive);
-    var bonus = bonusMap.get(engine.drive);
+    const engine = this.getEngine(combustion, impulse, hyperspace);
+    const speed = this.engines.get(engine.drive).speed;
+    const level = levelMap.get(engine.drive);
+    const bonus = bonusMap.get(engine.drive);
     return speed * (1 + (level * bonus)) + (speed * admiral);
   }
 }

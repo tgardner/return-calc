@@ -1,18 +1,17 @@
 interface IPlanet {
-  galaxy: number,
-  system: number,
-  planet: number,
+  galaxy: number;
+  system: number;
+  planet: number;
 }
 
 export class Planet implements IPlanet {
-  constructor()
   constructor(coordinates: string)
-  constructor(planet: IPlanet)
+  constructor(planet?: IPlanet)
   constructor(galaxy: number, system: number, planet: number)
-  constructor(galaxy?: any, system?: number, planet?: number){
-    if(typeof galaxy === "object") {
+  constructor(galaxy?: any, system?: number, planet?: number) {
+    if (typeof galaxy === 'object') {
       Object.assign(this, galaxy);
-    } else if(typeof galaxy === "string") {
+    } else if (typeof galaxy === 'string') {
       this.fromString(galaxy);
     } else {
       this.galaxy = galaxy || 1;
@@ -25,25 +24,28 @@ export class Planet implements IPlanet {
   public system: number;
   public planet: number;
 
-  public toString() : string {
+  public static sort(a: Planet, b: Planet): number {
+    if (a.galaxy !== b.galaxy) {
+      return a.galaxy < b.galaxy ? -1 : 1;
+    }
+    if (a.system !== b.system) {
+      return a.system < b.system ? -1 : 1;
+    }
+    if (a.planet !== b.planet) {
+      return a.planet < b.planet ? -1 : 1;
+    }
+    return 0;
+  }
+
+  public toString(): string {
     return `${this.galaxy}:${this.system}:${this.planet}`;
   }
 
   public fromString(planet: string) {
-    var match = planet.match(/^(\d+):(\d+):(\d+)/);
-    if(!match) return;
-    this.galaxy = parseInt(match[1]);
-    this.system = parseInt(match[2]);
-    this.planet = parseInt(match[3]);
+    const match = planet.match(/^(\d+):(\d+):(\d+)/);
+    if (!match) { return; }
+    this.galaxy = parseInt(match[1], 10);
+    this.system = parseInt(match[2], 10);
+    this.planet = parseInt(match[3], 10);
   }
-
-  public static sort(a: Planet, b: Planet) : number {
-    if(a.galaxy !== b.galaxy)
-      return a.galaxy < b.galaxy ? -1 : 1;
-    if(a.system !== b.system)
-      return a.system < b.system ? -1 : 1;
-    if(a.planet !== b.planet)
-      return a.planet < b.planet ? -1 : 1;
-    return 0;
-  }
-};
+}

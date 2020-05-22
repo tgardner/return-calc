@@ -14,9 +14,9 @@ export class JsonbinService extends StorageService {
 
   async load(): Promise<ILocation[]> {
     const url = `https://api.jsonbin.io/b/${this.env.get('binId')}/latest`;
-    var data = await this.http.get<IDataStore>(url, {
+    const data = await this.http.get<IDataStore>(url, {
       headers: {
-        "secret-key": this.env.get('secretKey')
+        'secret-key': this.env.get('secretKey')
       }
     }).toPromise();
 

@@ -9,14 +9,14 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 })
 export class ProfitCalculatorComponent {
   public Editor = ClassicEditor;
-  public report: string = '';
+  public report = '';
   public battleReport: BattleReport;
-  public debug: boolean = false;
+  public debug = false;
 
   constructor() {}
 
   public parse(): void {
-    var parser = new BattleReportParser();
+    const parser = new BattleReportParser();
     this.battleReport = parser.parse(this.report);
   }
 

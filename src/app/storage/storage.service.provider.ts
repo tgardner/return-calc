@@ -6,7 +6,7 @@ import { JsonbinService } from './jsonbin.service';
 import { SheetService } from './sheet.service';
 
 export const StorageServiceFactory = (env: EnvService, http: HttpClient) => {
-    const storageProvider = env.get("storageProvider").toUpperCase();
+    const storageProvider = env.get('storageProvider').toUpperCase();
     const providers = {
         JSON: JsonService,
         JSONBIN: JsonbinService,
@@ -14,11 +14,11 @@ export const StorageServiceFactory = (env: EnvService, http: HttpClient) => {
     };
 
     if (!providers.hasOwnProperty(storageProvider)) {
-        throw new Error(`Invalid storageProvider: ${env.get("storageProvider")}`);
+        throw new Error(`Invalid storageProvider: ${env.get('storageProvider')}`);
     }
 
-    var service = providers[storageProvider];
-    var locationService: StorageService = new service(http, env);
+    const service = providers[storageProvider];
+    const locationService: StorageService = new service(http, env);
     return locationService;
 };
 

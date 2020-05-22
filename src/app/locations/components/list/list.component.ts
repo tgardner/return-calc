@@ -8,16 +8,16 @@ import { EnvService } from '../../../config/env.service';
   styleUrls: ['./list.component.scss']
 })
 export class LocationListComponent implements OnInit {
-  public galaxy: number = 1;
-  public system: number = 1;
+  public galaxy = 1;
+  public system = 1;
   public players: string[] = [];
-  public searchTerm: string = "";
+  public searchTerm = '';
   public searchResults: ILocation[] = [];
   public Math: Math;
 
   public get url(): string {
-    if (this.env.get("storageProvider").toUpperCase() == "SHEET") {
-      return this.env.get("url");
+    if (this.env.get('storageProvider').toUpperCase() === 'SHEET') {
+      return this.env.get('url');
     }
     return null;
   }
@@ -37,7 +37,7 @@ export class LocationListComponent implements OnInit {
   }
 
   public catchSearchEnter($event: any): void {
-    if ($event.keyCode == 13) {
+    if ($event.keyCode === 13) {
       this.search();
     }
   }

@@ -16,7 +16,7 @@ const maxPlanets = 15;
 })
 export class RecycleComponent extends BaseCalculator {
   public flights: Flight[];
-  public show: boolean = false;
+  public show = false;
   public startTime: Date;
   public selected?: number = null;
   private timer: Subscription;
@@ -32,7 +32,7 @@ export class RecycleComponent extends BaseCalculator {
   protected load(params: Params) {
     super.load(params);
 
-    let flightTime = this.calculator.model.calculateFlightTime();
+    const flightTime = this.calculator.model.calculateFlightTime();
     if (isNaN(flightTime) || flightTime === Infinity) {
       this.show = false;
       return;
@@ -40,27 +40,27 @@ export class RecycleComponent extends BaseCalculator {
 
     this.show = true;
 
-    let calc = this.calculator.model.clone();
+    const calc = this.calculator.model.clone();
     this.flights = new Array(maxPlanets);
-    for (var i = 0; i < maxPlanets; ++i) {
+    for (let i = 0; i < maxPlanets; ++i) {
       calc.end.planet = i + 1;
-      var duration = calc.calculateFlightTime();
+      const duration = calc.calculateFlightTime();
       this.flights[i] = new Flight(duration);
     }
 
     if (params.startTime) {
       this.startTime = new Date(params.startTime);
       this.flights.forEach(f => {
-        var r = f.duration - (+new Date() - +this.startTime) / 1000;
+        const r = f.duration - (+new Date() - +this.startTime) / 1000;
         f.start(r);
-      })
+      });
       this.timer = timeInterval.subscribe(() => this.tick());
     }
   }
 
   protected state(): any {
-    var state = super.state();
-    state.startTime = this.startTime?.toISOString() || "";
+    const state = super.state();
+    state.startTime = this.startTime?.toISOString() || '';
     return state;
   }
 
@@ -84,7 +84,7 @@ export class RecycleComponent extends BaseCalculator {
   }
 
   private tick(): void {
-    var remaining = this.flights.filter(f => f.remaining > 0);
+    const remaining = this.flights.filter(f => f.remaining > 0);
     if (remaining.length === 0) {
       this.stop();
     }

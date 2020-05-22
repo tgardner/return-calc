@@ -8,7 +8,7 @@ import { Calculator } from '../../calculator';
 })
 export class ControlsComponent {
   @Input() model: Calculator;
-  @Input() hidePlanet: boolean = false;
+  @Input() hidePlanet = false;
 
   @Output() change: EventEmitter<Calculator> = new EventEmitter<Calculator>();
 

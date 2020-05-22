@@ -29,22 +29,22 @@ export class DeployComponent extends BaseCalculator {
   protected load(params: Params) {
     super.load(params);
 
-    var flightTime = this.calculator.model.calculateFlightTime();
+    const flightTime = this.calculator.model.calculateFlightTime();
     if (isNaN(flightTime) || flightTime === Infinity) {
       this.initial = null;
       return;
     }
-    
+
     this.initial = this.time.transform(flightTime);
     this.flight = new Flight(flightTime);
     if (params.startTime) {
       this.flight.startTime = new Date(params.startTime);
     }
 
-    if(params.recallTime) {
+    if (params.recallTime) {
       this.flight.recallTime = new Date(params.recallTime);
     }
-    
+
     if (this.timer) {
       this.timer.unsubscribe();
       this.timer = null;
@@ -56,9 +56,9 @@ export class DeployComponent extends BaseCalculator {
   }
 
   protected state() {
-    var state = super.state();
-    state.startTime = this.flight?.startTime?.toISOString() || "";
-    state.recallTime = this.flight?.recallTime?.toISOString() || "";
+    const state = super.state();
+    state.startTime = this.flight?.startTime?.toISOString() || '';
+    state.recallTime = this.flight?.recallTime?.toISOString() || '';
     return state;
   }
 
@@ -84,7 +84,7 @@ export class DeployComponent extends BaseCalculator {
   }
 
   private initialSeconds(): number {
-    var a = this.initial.split(':'); // split it at the colons
+    const a = this.initial.split(':'); // split it at the colons
 
     // minutes are worth 60 seconds. Hours are worth 60 minutes.
     return (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
