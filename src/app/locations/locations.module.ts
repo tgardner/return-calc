@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LocationListComponent } from './list.component';
+import { LocationListComponent } from './components/list/list.component';
 import { FormsModule } from '@angular/forms';
 import { LocationRoutingModule } from './location-routing.module';
 import { ConfigModule } from '../config/config.module';
-import { LocationServiceProvider } from './location.service.provider';
+import { StorageModule } from '../storage/storage.module';
 
 @NgModule({
   declarations: [
@@ -14,10 +14,8 @@ import { LocationServiceProvider } from './location.service.provider';
     CommonModule,
     FormsModule,
     LocationRoutingModule,
-    ConfigModule
-  ],
-  providers: [
-    LocationServiceProvider
+    ConfigModule,
+    StorageModule
   ]
 })
 export class LocationsModule { }

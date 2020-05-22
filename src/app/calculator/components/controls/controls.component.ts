@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Calculator } from '../calculator';
+import { Calculator } from '../../calculator';
 
 @Component({
   selector: 'app-calculator-controls',
-  templateUrl: './calculator-controls.component.html',
-  styleUrls: ['./calculator-controls.component.scss']
+  templateUrl: './controls.component.html',
+  styleUrls: ['./controls.component.scss']
 })
-export class CalculatorControlsComponent {
+export class ControlsComponent {
   @Input() model: Calculator;
   @Input() hidePlanet: boolean = false;
 

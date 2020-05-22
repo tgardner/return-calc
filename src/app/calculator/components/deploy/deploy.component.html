@@ -1,4 +1,7 @@
 <div>
+  <app-calculator-controls [model]="calculator.model" [hidePlanet]="false"
+    (change)='navigate()'></app-calculator-controls>
+
   <div>
     <label for="initial_time">Initial Time:</label>
     <input type="text" id="initial_time" pattern="[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}" [(ngModel)]="initial"

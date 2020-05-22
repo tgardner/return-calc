@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { LocationService, ILocation } from './location.service';
+import { StorageService, ILocation } from './storage.service';
 import { EnvService } from '../config/env.service';
 
-export class SheetService extends LocationService {
+export class SheetService extends StorageService {
   private galaxyRows: number;
 
   constructor(private http: HttpClient, private env : EnvService) {

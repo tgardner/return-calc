@@ -1,4 +1,4 @@
-import { LocationService, ILocation } from './location.service';
+import { StorageService, ILocation } from './storage.service';
 import { HttpClient } from '@angular/common/http';
 import { EnvService } from '../config/env.service';
 
@@ -6,7 +6,7 @@ interface IDataStore {
   locations: ILocation[];
 }
 
-export class JsonService extends LocationService {
+export class JsonService extends StorageService {
   constructor(private http: HttpClient, private env: EnvService) {
     super();
   }

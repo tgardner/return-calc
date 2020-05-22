@@ -5,7 +5,7 @@ export interface ILocation {
   player?: string
 }
 
-export abstract class LocationService {
+export abstract class StorageService {
   protected data: ILocation[] = [];
   protected systemPlanets = 15;
 

@@ -1,53 +1,55 @@
 import { Component } from '@angular/core';
-import { Calculator } from '../calculator';
 import { interval, Subscription } from 'rxjs';
-import { Flight } from '../flight';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Flight } from '../../../shared/flight';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { TimePipe } from 'src/app/shared/time.pipe';
+import { BaseCalculator } from '../../base-calculator';
+import { CalculatorService } from '../../calculator.service';
 
 const timeInterval = interval(100);
 const maxPlanets = 15;
 
 @Component({
   selector: 'app-recycle-calculator',
-  templateUrl: './recycle-calculator.component.html',
-  styleUrls: ['./recycle-calculator.component.scss']
+  templateUrl: './recycle.component.html',
+  styleUrls: ['./recycle.component.scss']
 })
-export class RecycleCalculatorComponent {
+export class RecycleComponent extends BaseCalculator {
   public flights: Flight[];
   public show: boolean = false;
   public startTime: Date;
   public selected?: number = null;
-  private calculator: Calculator;
   private timer: Subscription;
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute) {
+    public time: TimePipe,
+    calculator: CalculatorService,
+    router: Router,
+    route: ActivatedRoute) {
+    super(calculator, route, router);
   }
 
-  public calculate(calculator: Calculator): void {
-    this.calculator = calculator.clone();
+  protected load(params: Params) {
+    super.load(params);
 
-    this.reset();
-
-    var flightTime = this.calculator.calculateFlightTime();
-
+    let flightTime = this.calculator.model.calculateFlightTime();
     if (isNaN(flightTime) || flightTime === Infinity) {
       this.show = false;
       return;
     }
 
     this.show = true;
+
+    let calc = this.calculator.model.clone();
     this.flights = new Array(maxPlanets);
     for (var i = 0; i < maxPlanets; ++i) {
-      this.calculator.end.planet = i + 1;
-      var duration = this.calculator.calculateFlightTime();
+      calc.end.planet = i + 1;
+      var duration = calc.calculateFlightTime();
       this.flights[i] = new Flight(duration);
     }
 
-    var params = this.route.snapshot.queryParams;
-    if (params["startTime"]) {
-      this.startTime = new Date(params["startTime"]);
+    if (params.startTime) {
+      this.startTime = new Date(params.startTime);
       this.flights.forEach(f => {
         var r = f.duration - (+new Date() - +this.startTime) / 1000;
         f.start(r);
@@ -56,21 +58,11 @@ export class RecycleCalculatorComponent {
     }
   }
 
-  private navigate() {
-    var data = {
-      startTime: this.startTime?.toISOString() || ""
-    };
-
-    this.router.navigate(
-      [],
-      {
-        relativeTo: this.route,
-        queryParams: data,
-        queryParamsHandling: 'merge',
-        replaceUrl: true
-      });
+  protected state(): any {
+    var state = super.state();
+    state.startTime = this.startTime?.toISOString() || "";
+    return state;
   }
-
 
   private reset(): void {
     if (this.timer) {

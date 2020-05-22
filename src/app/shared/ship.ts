@@ -1,4 +1,8 @@
-import { ICost } from './icost';
+export interface ICost {
+  metal: number;
+  crystal: number;
+  deuterium: number;
+}
 
 enum Drive {
   Combustion = 1,

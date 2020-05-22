@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LocationListComponent } from './list.component';
+import { LocationListComponent } from './components/list/list.component';
 
 const routes: Routes = [
   { path: '',  component: LocationListComponent }
@@ -9,6 +9,9 @@ const routes: Routes = [
 @NgModule({
   imports: [
     RouterModule.forChild(routes)
+  ],
+  exports: [
+    RouterModule
   ]
 })
 export class LocationRoutingModule {

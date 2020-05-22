@@ -1,11 +1,11 @@
-import { LocationService } from './location.service';
+import { StorageService } from './storage.service';
 import { EnvService } from '../config/env.service';
 import { HttpClient } from '@angular/common/http';
 import { JsonService } from './json.service';
 import { JsonbinService } from './jsonbin.service';
 import { SheetService } from './sheet.service';
 
-export const LocationServiceFactory = (env: EnvService, http: HttpClient) => {
+export const StorageServiceFactory = (env: EnvService, http: HttpClient) => {
     const storageProvider = env.get("storageProvider").toUpperCase();
     const providers = {
         JSON: JsonService,
@@ -18,12 +18,12 @@ export const LocationServiceFactory = (env: EnvService, http: HttpClient) => {
     }
 
     var service = providers[storageProvider];
-    var locationService: LocationService = new service(http, env);
+    var locationService: StorageService = new service(http, env);
     return locationService;
 };
 
-export const LocationServiceProvider = {
-    provide: LocationService,
-    useFactory: LocationServiceFactory,
+export const StorageServiceProvider = {
+    provide: StorageService,
+    useFactory: StorageServiceFactory,
     deps: [EnvService, HttpClient],
 };

@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { BattleReportParser, BattleReport, Winner } from '../battle-report';
+import { BattleReportParser, BattleReport, Winner } from '../../battle-report';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
   selector: 'app-profit-calculator',
-  templateUrl: './profit-calculator.component.html',
-  styleUrls: ['./profit-calculator.component.scss']
+  templateUrl: './calculator.component.html',
+  styleUrls: ['./calculator.component.scss']
 })
 export class ProfitCalculatorComponent {
   public Editor = ClassicEditor;
@@ -13,7 +13,7 @@ export class ProfitCalculatorComponent {
   public battleReport: BattleReport;
   public debug: boolean = false;
 
-  constructor() { }
+  constructor() {}
 
   public parse(): void {
     var parser = new BattleReportParser();

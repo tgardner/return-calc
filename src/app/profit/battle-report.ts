@@ -1,5 +1,4 @@
-import { SHIPS, IShip } from './ship';
-import { ICost } from './icost';
+import { SHIPS, IShip, ICost } from '../shared/ship';
 
 const allowedShips: string[] = SHIPS.map(s => s.name);
 

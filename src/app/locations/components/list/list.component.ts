@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { LocationService, ILocation } from './location.service';
-import { EnvService } from '../config/env.service';
+import { StorageService, ILocation } from '../../../storage/storage.service';
+import { EnvService } from '../../../config/env.service';
 
 @Component({
   selector: 'app-location-list',
@@ -13,7 +13,7 @@ export class LocationListComponent implements OnInit {
   public players: string[] = [];
   public searchTerm: string = "";
   public searchResults: ILocation[] = [];
-  public Math: any;
+  public Math: Math;
 
   public get url(): string {
     if (this.env.get("storageProvider").toUpperCase() == "SHEET") {
@@ -22,7 +22,7 @@ export class LocationListComponent implements OnInit {
     return null;
   }
 
-  constructor(public locationService: LocationService, private env: EnvService) {
+  constructor(public locationService: StorageService, private env: EnvService) {
     this.Math = Math;
   }
 

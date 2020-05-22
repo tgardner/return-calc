@@ -1,3 +1,5 @@
+<app-calculator-controls [model]="calculator.model" [hidePlanet]="true" (change)='navigate()'></app-calculator-controls>
+
 <div [hidden]="!show" class="text-center">
   <p>
     <button type="button" name="button" (click)="start()" *ngIf="!startTime"
