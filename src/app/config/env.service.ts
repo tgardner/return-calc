@@ -1,5 +1,5 @@
 interface IMap {
-  [key: string]: string;
+  [key: string]: any;
 }
 
 export class EnvService {

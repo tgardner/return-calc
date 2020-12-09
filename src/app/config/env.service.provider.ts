@@ -1,11 +1,9 @@
 import { EnvService } from './env.service';
+import { environment } from './../../environments/environment';
 
 export const EnvServiceFactory = () => {
     // Read environment variables from browser window
-    const browserWindow = window || {};
-    const browserWindowEnv = browserWindow['__env'] || {};
-
-    const env = new EnvService(browserWindowEnv);
+    const env = new EnvService(environment);
     return env;
 };
 

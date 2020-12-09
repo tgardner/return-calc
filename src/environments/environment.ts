@@ -1,3 +1,5 @@
 export const environment = {
-  production: false
+  production: false,
+  storageProvider: "json",
+  url: "/assets/data.json"
 };
