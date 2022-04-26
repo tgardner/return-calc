@@ -1,7 +1,8 @@
 import { CalculatorService } from './calculator.service';
-import { OnInit } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 
+@Injectable()
 export abstract class BaseCalculator implements OnInit {
     constructor(
         public calculator: CalculatorService,
