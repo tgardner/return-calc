@@ -1,4 +1,4 @@
-[![Build Status](https://tgardner.visualstudio.com/return-calc/_apis/build/status/tgardner.return-calc?branchName=master)](https://tgardner.visualstudio.com/return-calc/_build/latest?definitionId=1&branchName=master)
+![Build Status](https://github.com/tgardner/return-calc/actions/workflows/firebase-hosting-merge.yml/badge.svg)
 # ReturnCalc
 
 OGame Fleet return time calculator
